@@ -1,6 +1,7 @@
 spring:
     data:
         mongodb:
+                uri: 
                 database: taxService
                 
 
