@@ -1,106 +1,40 @@
 package com.skillstorm.backend.models;
 
-import java.util.Date;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "users")
+@Document(collection = "users")
 public class User {
 
-    @Id
-    @Column
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    @Column(name = "first_name")
+    // Mongo will generate _id
+    @MongoId
+    private ObjectId _id;
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
-
-    @Column(name = "ssn")
     private int ssn;
-
-    @Column(name = "email")
+    private String dateOfBirth;
     private String email;
-
-    @Column(name = "password")
     private String password;
-
-    @Column(name = "date_of_birth")
-    private Date dateOfBirth;
-
-    @Column(name = "filing_status")
-    private String filingStatus;
-
-    @Column(name = "street_primary")
     private String streetPrimary;
-
-    @Column(name = "street_secondary")
     private String streetSecondary;
-
-    @Column(name = "city")
     private String city;
-
-    @Column(name = "state")
     private String state;
+    private int zipcode;
 
-    @Column(name = "zip_code")
-    private int zipCode;
-
-    public User() {
-
-    }
-
-    /*
-     * Creating a new user will always require
-     * firstName, lastName, ssn, email, password, dateOfBirth, filingStatus,
-     * streetPrimary, city, state, zipCode
-     * streetSecondary is the only optional parameter
-     */
-    public User(String firstName, String lastName, int ssn, String email, String password, Date dateOfBirth,
-            String filingStatus, String streetPrimary, String city, String state, int zipCode) {
+    public User(String firstName, String lastName, int ssn, String dateOfBirth, String email, String password,
+            String streetPrimary, String streetSecondary, String city, String state, int zipcode) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
+        this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.password = password;
-        this.dateOfBirth = dateOfBirth;
-        this.filingStatus = filingStatus;
-        this.streetPrimary = streetPrimary;
-        this.city = city;
-        this.state = state;
-        this.zipCode = zipCode;
-    }
-
-    public User(String firstName, String lastName, int ssn, String email, String password, Date dateOfBirth,
-            String filingStatus, String streetPrimary, String streetSecondary, String city, String state, int zipCode) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.ssn = ssn;
-        this.email = email;
-        this.password = password;
-        this.dateOfBirth = dateOfBirth;
-        this.filingStatus = filingStatus;
         this.streetPrimary = streetPrimary;
         this.streetSecondary = streetSecondary;
         this.city = city;
         this.state = state;
-        this.zipCode = zipCode;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.zipcode = zipcode;
     }
 
     public String getFirstName() {
@@ -127,6 +61,14 @@ public class User {
         this.ssn = ssn;
     }
 
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -141,22 +83,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    public String getFilingStatus() {
-        return filingStatus;
-    }
-
-    public void setFilingStatus(String filingStatus) {
-        this.filingStatus = filingStatus;
     }
 
     public String getStreetPrimary() {
@@ -191,31 +117,38 @@ public class User {
         this.state = state;
     }
 
-    public int getZipCode() {
-        return zipCode;
+    public int getZipcode() {
+        return zipcode;
     }
 
-    public void setZipCode(int zipCode) {
-        this.zipCode = zipCode;
+    public void setZipcode(int zipcode) {
+        this.zipcode = zipcode;
+    }
+
+    public ObjectId getId() {
+        return _id;
+    }
+
+    public void setId(ObjectId id) {
+        this._id = id;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + id;
+        result = prime * result + ((_id == null) ? 0 : _id.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
         result = prime * result + ssn;
+        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-        result = prime * result + ((filingStatus == null) ? 0 : filingStatus.hashCode());
         result = prime * result + ((streetPrimary == null) ? 0 : streetPrimary.hashCode());
         result = prime * result + ((streetSecondary == null) ? 0 : streetSecondary.hashCode());
         result = prime * result + ((city == null) ? 0 : city.hashCode());
         result = prime * result + ((state == null) ? 0 : state.hashCode());
-        result = prime * result + zipCode;
+        result = prime * result + zipcode;
         return result;
     }
 
@@ -228,7 +161,10 @@ public class User {
         if (getClass() != obj.getClass())
             return false;
         User other = (User) obj;
-        if (id != other.id)
+        if (_id == null) {
+            if (other._id != null)
+                return false;
+        } else if (!_id.equals(other._id))
             return false;
         if (firstName == null) {
             if (other.firstName != null)
@@ -242,6 +178,11 @@ public class User {
             return false;
         if (ssn != other.ssn)
             return false;
+        if (dateOfBirth == null) {
+            if (other.dateOfBirth != null)
+                return false;
+        } else if (!dateOfBirth.equals(other.dateOfBirth))
+            return false;
         if (email == null) {
             if (other.email != null)
                 return false;
@@ -251,16 +192,6 @@ public class User {
             if (other.password != null)
                 return false;
         } else if (!password.equals(other.password))
-            return false;
-        if (dateOfBirth == null) {
-            if (other.dateOfBirth != null)
-                return false;
-        } else if (!dateOfBirth.equals(other.dateOfBirth))
-            return false;
-        if (filingStatus == null) {
-            if (other.filingStatus != null)
-                return false;
-        } else if (!filingStatus.equals(other.filingStatus))
             return false;
         if (streetPrimary == null) {
             if (other.streetPrimary != null)
@@ -282,17 +213,17 @@ public class User {
                 return false;
         } else if (!state.equals(other.state))
             return false;
-        if (zipCode != other.zipCode)
+        if (zipcode != other.zipcode)
             return false;
         return true;
     }
 
     @Override
     public String toString() {
-        return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn + ", email="
-                + email + ", password=" + password + ", dateOfBirth=" + dateOfBirth + ", filingStatus=" + filingStatus
-                + ", streetPrimary=" + streetPrimary + ", streetSecondary=" + streetSecondary + ", city=" + city
-                + ", state=" + state + ", zipCode=" + zipCode + "]";
+        return "User [_id=" + _id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn
+                + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", password=" + password + ", streetPrimary="
+                + streetPrimary + ", streetSecondary=" + streetSecondary + ", city=" + city + ", state=" + state
+                + ", zipcode=" + zipcode + "]";
     }
 
 }

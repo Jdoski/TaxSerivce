@@ -1,12 +1,13 @@
 spring:
-    #datasource:
+    data:
+        mongodb:
+                uri: mongodb+srv://user01:9H1LxdhbxNjgf3j9@taxservice.soyqc0g.mongodb.net/?retryWrites=true&w=majority
+                database: taxService
+                
 
     output:
         ansi:
-            enabled: ALWAYS
-
-server:
-    port: 8080                              
+            enabled: ALWAYS                             
 
 # setting the logging level
 logging:
