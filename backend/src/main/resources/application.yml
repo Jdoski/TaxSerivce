@@ -1,7 +1,6 @@
 spring:
     data:
         mongodb:
-                uri: mongodb+srv://user01:9H1LxdhbxNjgf3j9@taxservice.soyqc0g.mongodb.net/?retryWrites=true&w=majority
                 database: taxService
                 
 
