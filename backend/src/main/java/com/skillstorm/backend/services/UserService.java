@@ -47,5 +47,18 @@ public class UserService {
     public void deleteUserById(ObjectId id) {
         userRepo.deleteById(id);
     }
+
+    // update a user by their id
+    public User updateUserById(ObjectId id, User user) {
+        Optional<User> userToUpdate = userRepo.findById(id);
+
+        if(userToUpdate.isPresent()) {
+            User updatedUser = userToUpdate.get();
+            return userRepo.save(updatedUser);
+        }
+        else{
+            return null;
+        }
+    }
 }
 
