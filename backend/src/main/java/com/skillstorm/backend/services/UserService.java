@@ -48,6 +48,7 @@ public class UserService {
         userRepo.deleteById(id);
     }
 
+<<<<<<< Updated upstream
     // update a user by their id
     public User updateUserById(ObjectId id, User user) {
         Optional<User> userToUpdate = userRepo.findById(id);
@@ -59,6 +60,11 @@ public class UserService {
         else{
             return null;
         }
+=======
+    // update a user by passing in the user
+    public User updateUser(User user) {
+        return userRepo.save(user);
+>>>>>>> Stashed changes
     }
 }
 
