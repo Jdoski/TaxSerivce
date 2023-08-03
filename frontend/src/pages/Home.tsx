@@ -11,74 +11,104 @@ import {
   NavMenuButton,
   Title,
 } from "@trussworks/react-uswds";
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { login, logout } from "../features/userSlice";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const [navDropdownOpen, setNavDropdownOpen] = useState([false, false]);
-  const [isSignedIn, setIsSignedIn] = useState(false);
-
-  const handleToggleNavDropdown = (index: number): void => {
-    setNavDropdownOpen((prevNavDropdownOpen) => {
-      const newOpenState = Array(prevNavDropdownOpen.length).fill(false);
-
-      newOpenState[index] = !prevNavDropdownOpen[index];
-      return newOpenState;
-    });
-  };
+  const isSignedIn = useSelector((state: any) => state.user.isLoggedIn);
+  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user.user);
+  const { t, i18n } = useTranslation();
 
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
   };
 
-  const handleSearch = (): void => {
-    /* */
+  const handleLogin = (e: any) => {
+    e.preventDefault();
+    // Simulating a login action with a user object
+    const user = { id: 1, username: "john_doe" };
+    dispatch(login(user));
   };
 
-  const primaryNavItems = [
-    <a key="primaryNav_0" className="usa-nav__link">
-      <span>Home</span>
-    </a>,
-    <a key="primaryNav_2" className="usa-nav__link">
-      <span>About</span>
-    </a>,
-    <a key="primaryNav_2" className="usa-nav__link">
-      <span>Blank</span>
-    </a>,
-  ];
+  const handleLogout = (e: any) => {
+    e.preventDefault();
+    dispatch(logout());
+  };
 
-  const primaryNavItemsSignedIn = [
-    <a key="primaryNav_0" className="usa-nav__link">
-      <span>Home</span>
-    </a>,
-    <a key="primaryNav_2" className="usa-nav__link">
-      <span>Account</span>
-    </a>,
-    <a key="primaryNav_2" className="usa-nav__link">
-      <span>Reports</span>
-    </a>,
-  ];
+  // Closes the mobile menu when resizing back over to the default value
+  const handleResize = () => {
+    if (window.innerWidth >= 1023) {
+      setMobileNavOpen(false);
+    }
+  };
 
-  const secondaryNavItems = [
-    <Button type="button" style={{ margin: 10 }}>
-      <a key="secondaryNav_0" href="" style={{ color: "white" }}>
-        Log In
-      </a>
-    </Button>,
-    <Button type="button" style={{ margin: 10 }}>
-      <a key="secondaryNav_0" href="" style={{ color: "white" }}>
-        Sign Up
-      </a>
-    </Button>,
-  ];
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
-  const secondaryNavItemsSignedIn = [
-    <Button type="button" style={{}}>
-      <a key="secondaryNav_0" href="" style={{ color: "white" }}>
-        My Account
-      </a>
-    </Button>,
-  ];
+  useEffect(() => {
+    const lng = navigator.language;
+    i18n.changeLanguage(lng);
+  }, []);
+
+  const lng = navigator.language;
+
+  const primaryNavItems = isSignedIn
+    ? [
+        <a key="primaryNav_0" className="usa-nav__link">
+          <span>{t("nav.home")}</span>
+        </a>,
+        <a key="primaryNav_1" className="usa-nav__link">
+          <span>{t("nav.account")}</span>
+        </a>,
+        <a key="primaryNav_2" className="usa-nav__link">
+          <span>{t("nav.reports")}</span>
+        </a>,
+      ]
+    : [
+        <a key="primaryNav_0" className="usa-nav__link">
+          <span>{t("nav.home")}</span>
+        </a>,
+        <a key="primaryNav_1" className="usa-nav__link">
+          <span>{t("nav.about")}</span>
+        </a>,
+        <a key="primaryNav_2" className="usa-nav__link">
+          <span>{t("nav.contact")}</span>
+        </a>,
+      ];
+
+  const secondaryNavItems = isSignedIn
+    ? [
+        <Button type="button" style={{ margin: 10 }}>
+          <a key="secondaryNav_0" href="" style={{ color: "white" }}>
+            {t("btn.account")}
+          </a>
+        </Button>,
+        <Button onClick={handleLogout} type="button" style={{ margin: 10 }}>
+          <a key="secondaryNav_0" href="" style={{ color: "white" }}>
+            {t("btn.logout")}
+          </a>
+        </Button>,
+      ]
+    : [
+        <Button onClick={handleLogin} type="button" style={{ margin: 10 }}>
+          <a key="secondaryNav_0" href="" style={{ color: "white" }}>
+            {t("btn.login")}
+          </a>
+        </Button>,
+        <Button type="button" style={{ margin: 10 }}>
+          <a key="secondaryNav_0" href="" style={{ color: "white" }}>
+            {t("btn.signup")}
+          </a>
+        </Button>,
+      ];
 
   const returnToTop = (
     <GridContainer className="usa-footer__return-to-top">
@@ -116,10 +146,8 @@ export default function Home() {
         </div>
         <ExtendedNav
           aria-label="Primary navigation"
-          primaryItems={isSignedIn ? primaryNavItemsSignedIn : primaryNavItems}
-          secondaryItems={
-            isSignedIn ? secondaryNavItemsSignedIn : secondaryNavItems
-          }
+          primaryItems={primaryNavItems}
+          secondaryItems={secondaryNavItems}
           onToggleMobileNav={toggleMobileNav}
           mobileExpanded={mobileNavOpen}
         ></ExtendedNav>
@@ -136,7 +164,7 @@ export default function Home() {
             <Grid tablet={{ col: 8 }} className="usa-prose">
               <p>
                 SpecTaxular is a free to use federal tax calulator. You can
-                calculate how much in federal taxes they will owe based off a
+                calculate how much in federal taxes you will owe based off a
                 number of customisable fields.
               </p>
               <p>
@@ -150,11 +178,6 @@ export default function Home() {
           <GridContainer>
             <Grid row gap className="usa-graphic-list__row">
               <Grid tablet={{ col: true }} className="usa-media-block">
-                {/* <img
-                  className="usa-media-block__img"
-                  src={circleImg}
-                  alt="Alt text"
-                /> */}
                 <MediaBlockBody>
                   <h2 className="usa-graphic-list__heading">
                     Graphic headings can vary.
@@ -167,11 +190,6 @@ export default function Home() {
                 </MediaBlockBody>
               </Grid>
               <Grid tablet={{ col: true }} className="usa-media-block">
-                {/* <img
-                  className="usa-media-block__img"
-                  src={circleImg}
-                  alt="Alt text"
-                /> */}
                 <MediaBlockBody>
                   <h2 className="usa-graphic-list__heading">
                     Stick to 6 or fewer words.
