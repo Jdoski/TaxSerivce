@@ -39,3 +39,8 @@ local.properties
 resources/
 *application.yml
 *.yml
+
+### Config Folder ###
+config/
+backend\src\main\java\com\skillstorm\backend\config
+config

@@ -1,18 +1,24 @@
 package com.skillstorm.backend.models;
 
-import org.bson.types.ObjectId;
+import java.util.Collection;
+import java.util.Set;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import java.util.HashSet;
 
 @Document(collection = "users")
-public class User {
+public class User implements UserDetails {
 
     // Mongo will generate _id
     @MongoId
-    private ObjectId _id;
+    private String _id;
     private String firstName;
     private String lastName;
-    private int ssn;
+    private String ssn;
     private String dateOfBirth;
     private String email;
     private String password;
@@ -21,9 +27,10 @@ public class User {
     private String city;
     private String state;
     private int zipcode;
+    private String role;
 
-    public User(String firstName, String lastName, int ssn, String dateOfBirth, String email, String password,
-            String streetPrimary, String streetSecondary, String city, String state, int zipcode) {
+    public User(String firstName, String lastName, String ssn, String dateOfBirth, String email, String password,
+            String streetPrimary, String streetSecondary, String city, String state, int zipcode, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
@@ -35,6 +42,7 @@ public class User {
         this.city = city;
         this.state = state;
         this.zipcode = zipcode;
+        this.role = role;
     }
 
     public String getFirstName() {
@@ -53,11 +61,11 @@ public class User {
         this.lastName = lastName;
     }
 
-    public int getSsn() {
+    public String getSsn() {
         return ssn;
     }
 
-    public void setSsn(int ssn) {
+    public void setSsn(String ssn) {
         this.ssn = ssn;
     }
 
@@ -125,12 +133,20 @@ public class User {
         this.zipcode = zipcode;
     }
 
-    public ObjectId getId() {
+    public String get_id() {
         return _id;
     }
 
-    public void setId(ObjectId id) {
-        this._id = id;
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override
@@ -140,7 +156,7 @@ public class User {
         result = prime * result + ((_id == null) ? 0 : _id.hashCode());
         result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
         result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ssn;
+        result = prime * result + ((ssn == null) ? 0 : ssn.hashCode());
         result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((password == null) ? 0 : password.hashCode());
@@ -149,6 +165,7 @@ public class User {
         result = prime * result + ((city == null) ? 0 : city.hashCode());
         result = prime * result + ((state == null) ? 0 : state.hashCode());
         result = prime * result + zipcode;
+        result = prime * result + ((role == null) ? 0 : role.hashCode());
         return result;
     }
 
@@ -176,7 +193,10 @@ public class User {
                 return false;
         } else if (!lastName.equals(other.lastName))
             return false;
-        if (ssn != other.ssn)
+        if (ssn == null) {
+            if (other.ssn != null)
+                return false;
+        } else if (!ssn.equals(other.ssn))
             return false;
         if (dateOfBirth == null) {
             if (other.dateOfBirth != null)
@@ -215,6 +235,11 @@ public class User {
             return false;
         if (zipcode != other.zipcode)
             return false;
+        if (role == null) {
+            if (other.role != null)
+                return false;
+        } else if (!role.equals(other.role))
+            return false;
         return true;
     }
 
@@ -223,7 +248,45 @@ public class User {
         return "User [_id=" + _id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn
                 + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", password=" + password + ", streetPrimary="
                 + streetPrimary + ", streetSecondary=" + streetSecondary + ", city=" + city + ", state=" + state
-                + ", zipcode=" + zipcode + "]";
+                + ", zipcode=" + zipcode + ", role=" + role + "]";
     }
+
+    // User Details methods
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        SimpleGrantedAuthority userRole = new SimpleGrantedAuthority(this.role);
+        authorities.add(userRole);
+
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    
 
 }
