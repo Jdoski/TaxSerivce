@@ -1,6 +1,5 @@
 package com.skillstorm.backend.models;
 
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
 public class IncomeSource {

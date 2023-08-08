@@ -1,6 +1,5 @@
 package com.skillstorm.backend.models;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 import org.springframework.data.mongodb.core.mapping.Document;
