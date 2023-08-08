@@ -20,12 +20,12 @@ public class TaxReturn {
     private int taxable_income;
     private int tax_bill;
     private int tax_due;
-    private Object[] income_sources;
+    private IncomeSource income_sources;
 
     public TaxReturn() {
     }
 
-    public TaxReturn(String id, String tax_year, String filing_status) {
+    public TaxReturn(String id, String tax_year, String filing_status, IncomeSource income_sources) {
         this.id = id;
         this.tax_year = tax_year;
         this.filing_status = filing_status;
@@ -35,10 +35,11 @@ public class TaxReturn {
         this.taxable_income = 0;
         this.tax_bill = 0;
         this.tax_due = 0;
+        this.income_sources = income_sources;
     }
 
     public TaxReturn(String id, String userid, String tax_year, String filing_status, int deduction, int income,
-            int withheld, int taxable_income, int tax_bill, int tax_due, Object[] income_sources) {
+            int withheld, int taxable_income, int tax_bill, int tax_due, IncomeSource income_sources) {
         this.id = id;
         this.userid = userid;
         this.tax_year = tax_year;
@@ -132,14 +133,14 @@ public class TaxReturn {
         this.tax_due = tax_due;
     }
 
-    public Object[] getIncome_sources() {
+    public Object getIncome_sources() {
         return income_sources;
     }
 
-    public void setIncome_sources(Object[] income_sources) {
+    public void setIncome_sources(IncomeSource income_sources) {
         this.income_sources = income_sources;
     }
-
+    
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -154,7 +155,7 @@ public class TaxReturn {
         result = prime * result + taxable_income;
         result = prime * result + tax_bill;
         result = prime * result + tax_due;
-        result = prime * result + Arrays.deepHashCode(income_sources);
+        result = prime * result + ((income_sources == null) ? 0 : income_sources.hashCode());
         return result;
     }
 
@@ -199,7 +200,10 @@ public class TaxReturn {
             return false;
         if (tax_due != other.tax_due)
             return false;
-        if (!Arrays.deepEquals(income_sources, other.income_sources))
+        if (income_sources == null) {
+            if (other.income_sources != null)
+                return false;
+        } else if (!income_sources.equals(other.income_sources))
             return false;
         return true;
     }
@@ -209,7 +213,7 @@ public class TaxReturn {
         return "TaxReturn [id=" + id + ", userid=" + userid + ", tax_year=" + tax_year + ", filing_status="
                 + filing_status + ", deduction=" + deduction + ", income=" + income + ", withheld=" + withheld
                 + ", taxable_income=" + taxable_income + ", tax_bill=" + tax_bill + ", tax_due=" + tax_due
-                + ", income_sources=" + Arrays.toString(income_sources) + "]";
+                + ", income_sources=" + income_sources + "]";
     }
 
     public int deduction(String filing_status) {
