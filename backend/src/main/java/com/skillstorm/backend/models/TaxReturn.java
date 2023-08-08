@@ -1,5 +1,6 @@
 package com.skillstorm.backend.models;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,37 +14,29 @@ public class TaxReturn {
     private String userid;
     private String tax_year;
     private String filing_status;
-    private int deduction;
-    private int income;
-    private int withheld;
-    private int taxable_income;
-    private int tax_bill;
-    private int tax_due;
-    private IncomeSource income_sources;
+    private double deduction;
+    private double income;
+    private double withheld;
+    private double taxable_income;
+    private double tax_bill;
+    private double tax_due;
+    private IncomeSource[] income_sources;
 
     public TaxReturn() {
     }
 
-    public TaxReturn(String id, String tax_year, String filing_status, IncomeSource income_sources) {
+    public TaxReturn(String id, String tax_year, String filing_status) {
         this.id = id;
         this.tax_year = tax_year;
         this.filing_status = filing_status;
-        this.deduction = deduction(filing_status);
-        this.income = 0;
-        this.withheld = 0;
-        this.taxable_income = 0;
-        this.tax_bill = 0;
-        this.tax_due = 0;
-        this.income_sources = income_sources;
     }
 
-    public TaxReturn(String id, String userid, String tax_year, String filing_status, int deduction, int income,
-            int withheld, int taxable_income, int tax_bill, int tax_due, IncomeSource income_sources) {
-        this.id = id;
+    public TaxReturn(String userid, String tax_year, String filing_status, double deduction, double income,
+            double withheld, double taxable_income, double tax_bill, double tax_due, IncomeSource[] income_sources) {
         this.userid = userid;
         this.tax_year = tax_year;
         this.filing_status = filing_status;
-        this.deduction = deduction(filing_status);
+        this.deduction = deduction;
         this.income = income;
         this.withheld = withheld;
         this.taxable_income = taxable_income;
@@ -84,62 +77,62 @@ public class TaxReturn {
         this.filing_status = filing_status;
     }
 
-    public int getDeduction() {
+    public double getDeduction() {
         return deduction;
     }
 
-    public void setDeduction(int deduction) {
+    public void setDeduction(double deduction) {
         this.deduction = deduction;
     }
 
-    public int getIncome() {
+    public double getIncome() {
         return income;
     }
 
-    public void setIncome(int income) {
+    public void setIncome(double income) {
         this.income = income;
     }
 
-    public int getWithheld() {
+    public double getWithheld() {
         return withheld;
     }
 
-    public void setWithheld(int withheld) {
+    public void setWithheld(double withheld) {
         this.withheld = withheld;
     }
 
-    public int getTaxable_income() {
+    public double getTaxable_income() {
         return taxable_income;
     }
 
-    public void setTaxable_income(int taxable_income) {
+    public void setTaxable_income(double taxable_income) {
         this.taxable_income = taxable_income;
     }
 
-    public int getTax_bill() {
+    public double getTax_bill() {
         return tax_bill;
     }
 
-    public void setTax_bill(int tax_bill) {
+    public void setTax_bill(double tax_bill) {
         this.tax_bill = tax_bill;
     }
 
-    public int getTax_due() {
+    public double getTax_due() {
         return tax_due;
     }
 
-    public void setTax_due(int tax_due) {
+    public void setTax_due(double tax_due) {
         this.tax_due = tax_due;
     }
 
-    public Object getIncome_sources() {
+    public IncomeSource[] getIncome_sources() {
         return income_sources;
     }
 
-    public void setIncome_sources(IncomeSource income_sources) {
+    public void setIncome_sources(IncomeSource[] income_sources) {
         this.income_sources = income_sources;
     }
-    
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -148,13 +141,20 @@ public class TaxReturn {
         result = prime * result + ((userid == null) ? 0 : userid.hashCode());
         result = prime * result + ((tax_year == null) ? 0 : tax_year.hashCode());
         result = prime * result + ((filing_status == null) ? 0 : filing_status.hashCode());
-        result = prime * result + deduction;
-        result = prime * result + income;
-        result = prime * result + withheld;
-        result = prime * result + taxable_income;
-        result = prime * result + tax_bill;
-        result = prime * result + tax_due;
-        result = prime * result + ((income_sources == null) ? 0 : income_sources.hashCode());
+        long temp;
+        temp = Double.doubleToLongBits(deduction);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(income);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(withheld);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(taxable_income);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(tax_bill);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(tax_due);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        result = prime * result + Arrays.hashCode(income_sources);
         return result;
     }
 
@@ -187,22 +187,19 @@ public class TaxReturn {
                 return false;
         } else if (!filing_status.equals(other.filing_status))
             return false;
-        if (deduction != other.deduction)
+        if (Double.doubleToLongBits(deduction) != Double.doubleToLongBits(other.deduction))
             return false;
-        if (income != other.income)
+        if (Double.doubleToLongBits(income) != Double.doubleToLongBits(other.income))
             return false;
-        if (withheld != other.withheld)
+        if (Double.doubleToLongBits(withheld) != Double.doubleToLongBits(other.withheld))
             return false;
-        if (taxable_income != other.taxable_income)
+        if (Double.doubleToLongBits(taxable_income) != Double.doubleToLongBits(other.taxable_income))
             return false;
-        if (tax_bill != other.tax_bill)
+        if (Double.doubleToLongBits(tax_bill) != Double.doubleToLongBits(other.tax_bill))
             return false;
-        if (tax_due != other.tax_due)
+        if (Double.doubleToLongBits(tax_due) != Double.doubleToLongBits(other.tax_due))
             return false;
-        if (income_sources == null) {
-            if (other.income_sources != null)
-                return false;
-        } else if (!income_sources.equals(other.income_sources))
+        if (!Arrays.equals(income_sources, other.income_sources))
             return false;
         return true;
     }
@@ -212,19 +209,7 @@ public class TaxReturn {
         return "TaxReturn [id=" + id + ", userid=" + userid + ", tax_year=" + tax_year + ", filing_status="
                 + filing_status + ", deduction=" + deduction + ", income=" + income + ", withheld=" + withheld
                 + ", taxable_income=" + taxable_income + ", tax_bill=" + tax_bill + ", tax_due=" + tax_due
-                + ", income_sources=" + income_sources + "]";
-    }
-
-    public int deduction(String filing_status) {
-        // hashmap to get deduction
-        HashMap<String, Integer> deductionMap = new HashMap<>();
-
-        deductionMap.put("single", 12950);
-        deductionMap.put("married, filing separately", 12950);
-        deductionMap.put("married, filing jointly", 25900);
-        deductionMap.put("widow", 25900);
-        deductionMap.put("head of household", 19400);
-        return deductionMap.get(filing_status);
+                + ", income_sources=" + Arrays.toString(income_sources) + "]";
     }
 
 }

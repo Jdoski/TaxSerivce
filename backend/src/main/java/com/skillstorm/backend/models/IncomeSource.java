@@ -6,23 +6,15 @@ public class IncomeSource {
     @MongoId
     private String sourceid;
     private String type;
-    private int income;
-    private int withheld;
+    private double income;
+    private double withheld;
     private String employer;
     private String employer_id;
 
-    public IncomeSource() {}
-
-    public IncomeSource(String type, int income, int withheld, String employer, String employer_id) {
-        this.type = type;
-        this.income = income;
-        this.withheld = withheld;
-        this.employer = employer;
-        this.employer_id = employer_id;
+    public IncomeSource() {
     }
 
-    public IncomeSource(String sourceid, String type, int income, int withheld, String employer, String employer_id) {
-        this.sourceid = sourceid;
+    public IncomeSource(String type, double income, double withheld, String employer, String employer_id) {
         this.type = type;
         this.income = income;
         this.withheld = withheld;
@@ -46,19 +38,19 @@ public class IncomeSource {
         this.type = type;
     }
 
-    public int getIncome() {
+    public double getIncome() {
         return income;
     }
 
-    public void setIncome(int income) {
+    public void setIncome(double income) {
         this.income = income;
     }
 
-    public int getWithheld() {
+    public double getWithheld() {
         return withheld;
     }
 
-    public void setWithheld(int withheld) {
+    public void setWithheld(double withheld) {
         this.withheld = withheld;
     }
 
@@ -84,8 +76,11 @@ public class IncomeSource {
         int result = 1;
         result = prime * result + ((sourceid == null) ? 0 : sourceid.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
-        result = prime * result + income;
-        result = prime * result + withheld;
+        long temp;
+        temp = Double.doubleToLongBits(income);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(withheld);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
         result = prime * result + ((employer == null) ? 0 : employer.hashCode());
         result = prime * result + ((employer_id == null) ? 0 : employer_id.hashCode());
         return result;
@@ -110,9 +105,9 @@ public class IncomeSource {
                 return false;
         } else if (!type.equals(other.type))
             return false;
-        if (income != other.income)
+        if (Double.doubleToLongBits(income) != Double.doubleToLongBits(other.income))
             return false;
-        if (withheld != other.withheld)
+        if (Double.doubleToLongBits(withheld) != Double.doubleToLongBits(other.withheld))
             return false;
         if (employer == null) {
             if (other.employer != null)
@@ -132,5 +127,5 @@ public class IncomeSource {
         return "IncomeSource [sourceid=" + sourceid + ", type=" + type + ", income=" + income + ", withheld=" + withheld
                 + ", employer=" + employer + ", employer_id=" + employer_id + "]";
     }
-    
+
 }
