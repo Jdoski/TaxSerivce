@@ -7,8 +7,11 @@ import {
   Grid,
   GridContainer,
   Header,
+  Label,
   MediaBlockBody,
   NavMenuButton,
+  Table,
+  TextInput,
   Title,
 } from "@trussworks/react-uswds";
 import { useEffect, useState } from "react";
@@ -16,8 +19,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { login, logout } from "../features/userSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
+import ToggleableTextInput from "../components/ToggleTextInput";
 
-export default function Home() {
+export default function Account() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isSignedIn = useSelector((state: any) => state.user.isLoggedIn);
   const dispatch = useDispatch();
@@ -31,8 +35,8 @@ export default function Home() {
     setMobileNavOpen((prevOpen) => !prevOpen);
   };
 
-  const routeChange = (e: any) => {
-    let path = e.currentTarget.getAttribute("data-value");
+  const routeChange = () => {
+    let path = "login";
     navigate(path);
   };
 
@@ -83,7 +87,11 @@ export default function Home() {
         </a>,
       ]
     : [
-        <a key="primaryNav_0" className="usa-nav__link">
+        <a
+          key="primaryNav_0"
+          href="http://localhost:5173/"
+          className="usa-nav__link"
+        >
           <span>{t("nav.home")}</span>
         </a>,
         <a key="primaryNav_1" className="usa-nav__link">
@@ -160,96 +168,69 @@ export default function Home() {
 
       <main id="main-content">
         <section className="grid-container usa-section">
-          <Grid row gap>
-            <Grid tablet={{ col: 4 }}>
-              <h2 className="font-heading-xl margin-top-0 tablet:margin-bottom-0">
-                Quickly generate your federal tax returns
-              </h2>
-            </Grid>
-            <Grid tablet={{ col: 8 }} className="usa-prose">
-              <p>
-                SpecTaxular is a free to use federal tax calulator. You can
-                calculate how much in federal taxes you will owe based off a
-                number of customisable fields.
-              </p>
-              <p>
-                Each report will be saved to your account, allowing you to
-                compare different reports so you can make decisions accordingly!
-              </p>
-            </Grid>
+          <Grid
+            row
+            gap
+            className="margin-x-neg-205 margin-bottom-7 flex-justify-center"
+          >
+            <h2 className="font-heading-xl margin-top-0 tablet:margin-bottom-0">
+              User Account
+            </h2>
           </Grid>
-        </section>
-        <section className="usa-graphic-list usa-section usa-section--dark">
-          <GridContainer>
-            <Grid row gap className="usa-graphic-list__row">
-              <Grid tablet={{ col: true }} className="usa-media-block">
-                <MediaBlockBody>
-                  <h2 className="usa-graphic-list__heading">
-                    Graphic headings can vary.
-                  </h2>
-                  <p>
-                    Graphic headings can be used a few different ways, depending
-                    on what your landing page is for. Highlight your values,
-                    specific program areas, or results.
-                  </p>
-                </MediaBlockBody>
-              </Grid>
-              <Grid tablet={{ col: true }} className="usa-media-block">
-                <MediaBlockBody>
-                  <h2 className="usa-graphic-list__heading">
-                    Stick to 6 or fewer words.
-                  </h2>
-                  <p>
-                    Keep body text to about 30 words. They can be shorter, but
-                    try to be somewhat balanced across all four. It creates a
-                    clean appearance with good spacing.
-                  </p>
-                </MediaBlockBody>
-              </Grid>
-            </Grid>
-            <Grid row gap className="usa-graphic-list__row">
-              <Grid tablet={{ col: true }} className="usa-media-block">
-                <MediaBlockBody>
-                  <h2 className="usa-graphic-list__heading">
-                    Never highlight anything without a goal.
-                  </h2>
-                  <p>
-                    For anything you want to highlight here, understand what
-                    your users know now, and what activity or impression you
-                    want from them after they see it.
-                  </p>
-                </MediaBlockBody>
-              </Grid>
-              <Grid tablet={{ col: true }} className="usa-media-block">
-                <MediaBlockBody>
-                  <h2 className="usa-graphic-list__heading">
-                    Could also have 2 or 6.
-                  </h2>
-                  <p>
-                    In addition to your goal, find out your users’ goals. What
-                    do they want to know or do that supports your mission? Use
-                    these headings to show these.
-                  </p>
-                </MediaBlockBody>
-              </Grid>
-            </Grid>
-          </GridContainer>
-        </section>
-
-        <section id="test-section-id" className="usa-section">
-          <GridContainer>
-            <h2 className="font-heading-xl margin-y-0">Section heading</h2>
-            <p className="usa-intro">
-              Everything up to this point should help people understand your
-              agency or project: who you are, your goal or mission, and how you
-              approach it. Use this section to encourage them to act. Describe
-              why they should get in touch here, and use an active verb on the
-              button below. “Get in touch,” “Learn more,” and so on.
-            </p>
-            <a href="#" className="usa-button usa-button--big">
-              Call to action
-            </a>
-          </GridContainer>
+          <ToggleableTextInput
+            label="First Name"
+            id="first-name-value"
+            type="text"
+            defaultValue="First Name"
+          />
+          <ToggleableTextInput
+            label="Last Name"
+            id="last-name-value"
+            type="text"
+            defaultValue="Last Name"
+          />
+          <ToggleableTextInput
+            label="Social Security Number (SSN)"
+            id="ssn-value"
+            type="password"
+            defaultValue="000-00-0000"
+          />
+          <ToggleableTextInput
+            label="Email Address"
+            id="email-value"
+            type="text"
+            defaultValue="default@gmail.com"
+          />
+          <ToggleableTextInput
+            label="Date of Birth (DOB)"
+            id="dob-value"
+            type="text"
+            defaultValue="01/01/2001"
+          />
+          <ToggleableTextInput
+            label="Address"
+            id="address-value"
+            type="text"
+            defaultValue="50 Drury Lane"
+          />
+          <ToggleableTextInput
+            label="City"
+            id="city-value"
+            type="text"
+            defaultValue="Far Far Away"
+          />
+          <ToggleableTextInput
+            label="State"
+            id="state-value"
+            type="text"
+            defaultValue="Forever Land"
+          />
+          <ToggleableTextInput
+            label="Zip Code"
+            id="zip-code-value"
+            type="number"
+            defaultValue="77777"
+          />
         </section>
       </main>
 
