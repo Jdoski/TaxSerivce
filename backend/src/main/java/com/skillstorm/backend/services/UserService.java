@@ -75,20 +75,22 @@ public class UserService {
     }
 
     // update a user by their id
-    public User updateUserById(String id, User user) {
-        Optional<User> userToUpdate = userRepo.findById(id);
+    //public User updateUserById(String id, User user) {
+    public User updateUser(User user) {
+
+        Optional<User> userToUpdate = userRepo.findById(user.get_id());
+        //Optional<User> userToUpdate = userRepo.findById(id);
 
         if(userToUpdate.isPresent()) {
-            User updatedUser = userToUpdate.get();
-            return userRepo.save(updatedUser);
+            return userRepo.save(user);
         }
         else{
             return null;
         }
     }
     // update a user by passing in the user
-    public User updateUser(User user) {
+    /*public User updateUser(User user) {
         return userRepo.save(user);
-    }
+    }*/
 }
 
