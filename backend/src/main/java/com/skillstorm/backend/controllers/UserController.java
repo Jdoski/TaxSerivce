@@ -99,9 +99,6 @@ public class UserController {
 
     @GetMapping("/info")
     public Map<String, Object> userInfo(@AuthenticationPrincipal OAuth2User user){
-        String email = user.getAttribute("email");
-        String result = userService.createUserByEmail(email);
-        System.out.println(result);
         return user.getAttributes();
     }
 

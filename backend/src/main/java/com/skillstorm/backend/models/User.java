@@ -21,9 +21,7 @@ public class User implements UserDetails {
     private String ssn;
     private String dateOfBirth;
     private String email;
-    private String password;
     private String streetPrimary;
-    private String streetSecondary;
     private String city;
     private String state;
     private int zipcode;
@@ -34,16 +32,14 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public User(String firstName, String lastName, String ssn, String dateOfBirth, String email, String password,
-            String streetPrimary, String streetSecondary, String city, String state, int zipcode, String role) {
+    public User(String firstName, String lastName, String ssn, String dateOfBirth, String email,
+            String streetPrimary, String city, String state, int zipcode, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
-        this.password = password;
         this.streetPrimary = streetPrimary;
-        this.streetSecondary = streetSecondary;
         this.city = city;
         this.state = state;
         this.zipcode = zipcode;
@@ -93,28 +89,12 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getStreetPrimary() {
         return streetPrimary;
     }
 
     public void setStreetPrimary(String streetPrimary) {
         this.streetPrimary = streetPrimary;
-    }
-
-    public String getStreetSecondary() {
-        return streetSecondary;
-    }
-
-    public void setStreetSecondary(String streetSecondary) {
-        this.streetSecondary = streetSecondary;
     }
 
     public String getCity() {
@@ -157,6 +137,9 @@ public class User implements UserDetails {
         this.role = role;
     }
 
+ 
+    // User Details methods
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -167,9 +150,7 @@ public class User implements UserDetails {
         result = prime * result + ((ssn == null) ? 0 : ssn.hashCode());
         result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((streetPrimary == null) ? 0 : streetPrimary.hashCode());
-        result = prime * result + ((streetSecondary == null) ? 0 : streetSecondary.hashCode());
         result = prime * result + ((city == null) ? 0 : city.hashCode());
         result = prime * result + ((state == null) ? 0 : state.hashCode());
         result = prime * result + zipcode;
@@ -216,20 +197,10 @@ public class User implements UserDetails {
                 return false;
         } else if (!email.equals(other.email))
             return false;
-        if (password == null) {
-            if (other.password != null)
-                return false;
-        } else if (!password.equals(other.password))
-            return false;
         if (streetPrimary == null) {
             if (other.streetPrimary != null)
                 return false;
         } else if (!streetPrimary.equals(other.streetPrimary))
-            return false;
-        if (streetSecondary == null) {
-            if (other.streetSecondary != null)
-                return false;
-        } else if (!streetSecondary.equals(other.streetSecondary))
             return false;
         if (city == null) {
             if (other.city != null)
@@ -254,12 +225,9 @@ public class User implements UserDetails {
     @Override
     public String toString() {
         return "User [_id=" + _id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn
-                + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", password=" + password + ", streetPrimary="
-                + streetPrimary + ", streetSecondary=" + streetSecondary + ", city=" + city + ", state=" + state
-                + ", zipcode=" + zipcode + ", role=" + role + "]";
+                + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", streetPrimary=" + streetPrimary + ", city="
+                + city + ", state=" + state + ", zipcode=" + zipcode + ", role=" + role + "]";
     }
-
-    // User Details methods
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -293,6 +261,12 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    // included because userdetails requires it
+    @Override
+    public String getPassword() {
+        return "password not needed";
     }
 
     
