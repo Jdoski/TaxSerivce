@@ -1,19 +1,15 @@
 package com.skillstorm.backend.controllers;
 
-import java.io.IOException;
-import java.util.List;
-
-import javax.security.auth.message.config.AuthConfig;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.ui.Model;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,45 +21,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 
-/* 
-import com.auth0.AuthenticationController;
-import com.auth0.IdentityVerificationException;
-import com.auth0.Tokens;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.interfaces.DecodedJWT;*/
+
 import com.skillstorm.backend.models.User;
 import com.skillstorm.backend.services.UserService;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
+@CrossOrigin(allowCredentials = "true", originPatterns = "http://localhost:5173")
 public class UserController {
     
     @Autowired
     UserService userService;
 
-    // @Autowired
-    // private AuthConfig config;
-    /* 
     @Autowired
-    private AuthenticationController authenticationController;*/
+    private OAuth2AuthorizedClientService clientService;
 
+    /*      INTEND TO DELETE
     // return all users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.findAllUsers();
 
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-    }
+    }*/
 
     // return a user by their id
     @GetMapping("/user/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
         User user = userService.findUserById(id);
-
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
@@ -71,24 +57,22 @@ public class UserController {
     @DeleteMapping("/user/{id}")
     public ResponseEntity<String> deleteUserById(@PathVariable String id) {
         userService.deleteUserById(id);
-
         return new ResponseEntity<String>("User deleted successfully", HttpStatus.OK);
     }
 
+    /*  INTEND TO DELETE
     // delete a user by passing in the user
     @DeleteMapping("/user")
     public ResponseEntity<String> deleteUser(@RequestBody User user) {
         userService.deleteUser(user);
 
         return new ResponseEntity<String>("User deleted successfully", HttpStatus.OK);
-    }
+    }*/
 
     // create a user
     @PostMapping("/user")
     public ResponseEntity<String> createUser(@RequestBody User user) {
-        
         String result = userService.createUser(user);
-
         return new ResponseEntity<String>(result, HttpStatus.CREATED);
     }
 
@@ -105,7 +89,6 @@ public class UserController {
     @PutMapping("/user")
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         User updatedUser = userService.updateUser(user);
-        
         return new ResponseEntity<User>(updatedUser, HttpStatus.OK);
     }
 
@@ -114,39 +97,39 @@ public class UserController {
         return "Hello World";
     }
 
-    @GetMapping("/login")
-    public String home(Model model, @AuthenticationPrincipal OidcUser principal) {
-        return "index";
-    }
-    
-    
-
-    /* 
-    @GetMapping(value = "/login")
-    protected void login(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        String redirectUri = "http://localhost:8080/callback";
-        String authorizeUrl = authenticationController.buildAuthorizeUrl(request, response, redirectUri)
-                .withScope("openid email")
-                .build();
-            response.sendRedirect(authorizeUrl);
+    @GetMapping("/info")
+    public Map<String, Object> userInfo(@AuthenticationPrincipal OAuth2User user){
+        String email = user.getAttribute("email");
+        String result = userService.createUserByEmail(email);
+        System.out.println(result);
+        return user.getAttributes();
     }
 
-    @GetMapping(value = "/callback")
-    public void callback(HttpServletRequest request, HttpServletResponse response) throws IdentityVerificationException, IOException{
-        Tokens tokens = authenticationController.handle(request, response);
+    @GetMapping("/accessToken")
+    public String accessToken(Authentication auth) {
 
-        DecodedJWT jwt = JWT.decode(tokens.getIdToken());
-        TestingAuthenticationToken authToken2 = new TestingAuthenticationToken(jwt.getSubject(),
-            jwt.getToken());
-        authToken2.setAuthenticated(true);
+        // checking if the auth we pulled from the security context is a OAuth2AuthenticationToken
+        if(auth instanceof OAuth2AuthenticationToken) {
 
-        SecurityContextHolder.getContext().setAuthentication(authToken2);
-        response.sendRedirect(request.getContextPath() + "/");;
-        //response.sendRedirect(config.getContextPath(request) + "/");    
-    }*/
+            // casting the Authentication object to be a OAuth2AuthenticationToken object
+            OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) auth;
+
+            // retrieving the authorized client with *this specific* Authentication Principal (each user is unique)
+            OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(authToken.getAuthorizedClientRegistrationId(), authToken.getName());
 
 
+            /* Something like this for adding access token to http only cookie - make sure to take in HttpServletResponse as parameter
+            Cookie cookie = new Cookie("Access Token", client.getAccessToken().getTokenValue());
+            cookie.isHttpOnly();
+            response.addCookie(cookie);
+            */
 
+
+            // returning the value of the token
+            return client.getAccessToken().getTokenValue();
+        }
+        return "Access Token Not Found";
+    }
 
 }
 

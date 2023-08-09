@@ -1,6 +1,5 @@
 package com.skillstorm.backend.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +18,11 @@ public class UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    /* INTEND TO DELETE
     // return all users
     public List<User> findAllUsers() {
         return userRepo.findAll();
-    }
+    }*/
 
     // return user by their id
     public User findUserById(String id) {
@@ -64,33 +64,47 @@ public class UserService {
         }
     }
 
+    // create a user with only email
+    public String createUserByEmail(String email) {
+        Optional<User> userExists = userRepo.findByEmail(email);
+        if (userExists.isPresent()) {
+            return "Email account already exists";
+        } else {
+            // save to db
+            userRepo.save(new User(email, "ROLE_USER"));
+            return "User created";
+        }
+    }
+
+    /* INTEND TO DELETE
     // delete a user by passing in the user
     public void deleteUser(User user) {
         userRepo.delete(user);
-    } 
+    }*/
 
     // delete a user by passing in their id
     public void deleteUserById(String id) {
         userRepo.deleteById(id);
     }
 
-    // update a user by their id
-    //public User updateUserById(String id, User user) {
     public User updateUser(User user) {
 
-        Optional<User> userToUpdate = userRepo.findById(user.get_id());
+        //Optional<User> userToUpdate = userRepo.findById(user.get_id());
+        Optional<User> userToUpdate = userRepo.findByEmail(user.getUsername());
+
         //Optional<User> userToUpdate = userRepo.findById(id);
 
         if(userToUpdate.isPresent()) {
-            return userRepo.save(user);
+            // encode ssn
+            user.setSsn(passwordEncoder.encode(user.getSsn()));
+            // set role to user
+            user.setRole("ROLE_USER");
+            // save to db
+            userRepo.save(user);            return userRepo.save(user);
         }
         else{
             return null;
         }
     }
-    // update a user by passing in the user
-    /*public User updateUser(User user) {
-        return userRepo.save(user);
-    }*/
 }
 

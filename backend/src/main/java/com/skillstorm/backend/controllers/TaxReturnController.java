@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/users/returns")
-@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
+@CrossOrigin(allowCredentials = "true", originPatterns = "http://localhost:5173")
 public class TaxReturnController {
     @Autowired
     TaxReturnService taxReturnService;

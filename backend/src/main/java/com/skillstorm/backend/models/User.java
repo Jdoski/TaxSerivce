@@ -29,6 +29,11 @@ public class User implements UserDetails {
     private int zipcode;
     private String role;
 
+    public User(String email, String role) {
+        this.email = email;
+        this.role = role;
+    }
+
     public User(String firstName, String lastName, String ssn, String dateOfBirth, String email, String password,
             String streetPrimary, String streetSecondary, String city, String state, int zipcode, String role) {
         this.firstName = firstName;
