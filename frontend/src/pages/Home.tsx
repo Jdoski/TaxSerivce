@@ -1,5 +1,4 @@
 import {
-  Address,
   Button,
   ExtendedNav,
   Footer,
@@ -13,7 +12,7 @@ import {
 } from "@trussworks/react-uswds";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "../features/userSlice";
+import { logout } from "../features/userSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 

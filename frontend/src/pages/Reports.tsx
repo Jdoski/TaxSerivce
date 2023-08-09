@@ -14,9 +14,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../features/userSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import ToggleableTextInput from "../components/ToggleTextInput";
+import Accordion from "../components/Accordion";
 
-export default function Account() {
+export default function Reports() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isSignedIn = useSelector((state: any) => state.user.isLoggedIn);
   const dispatch = useDispatch();
@@ -154,66 +154,28 @@ export default function Account() {
           <Grid
             row
             gap
-            className="margin-x-neg-205 margin-bottom-7 flex-justify-center"
+            className="margin-x-neg-205 margin-bottom-2 flex-justify-center"
           >
             <h2 className="font-heading-xl margin-top-0 tablet:margin-bottom-0">
-              User Account
+              Tax Returns
             </h2>
           </Grid>
-          <ToggleableTextInput
-            label="First Name"
-            id="first-name-value"
-            type="text"
-            defaultValue="First Name"
-          />
-          <ToggleableTextInput
-            label="Last Name"
-            id="last-name-value"
-            type="text"
-            defaultValue="Last Name"
-          />
-          <ToggleableTextInput
-            label="Social Security Number (SSN)"
-            id="ssn-value"
-            type="password"
-            defaultValue="000-00-0000"
-          />
-          <ToggleableTextInput
-            label="Email Address"
-            id="email-value"
-            type="text"
-            defaultValue="default@gmail.com"
-          />
-          <ToggleableTextInput
-            label="Date of Birth (DOB)"
-            id="dob-value"
-            type="text"
-            defaultValue="01/01/2001"
-          />
-          <ToggleableTextInput
-            label="Address"
-            id="address-value"
-            type="text"
-            defaultValue="50 Drury Lane"
-          />
-          <ToggleableTextInput
-            label="City"
-            id="city-value"
-            type="text"
-            defaultValue="Far Far Away"
-          />
-          <ToggleableTextInput
-            label="State"
-            id="state-value"
-            type="text"
-            defaultValue="Forever Land"
-          />
-          <ToggleableTextInput
-            label="Zip Code"
-            id="zip-code-value"
-            type="number"
-            defaultValue="77777"
-          />
+          <Grid className="flex-justify-center" row>
+            <Button
+              data-value="../generate-report"
+              type="button"
+              onClick={routeChange}
+              style={{ marginBottom: 20 }}
+            >
+              New Report
+            </Button>
+          </Grid>
+          <GridContainer>
+            <Grid className="flex-justify-center" row>
+              <Accordion year={2003} />
+              <Accordion year={2004} />
+            </Grid>
+          </GridContainer>
         </section>
       </main>
 
