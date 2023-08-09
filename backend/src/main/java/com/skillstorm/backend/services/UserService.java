@@ -97,8 +97,8 @@ public class UserService {
         Optional<User> userToUpdate = userRepo.findByEmail(user.getEmail());
 
         if (userToUpdate.isPresent()) {
-            // attach id
-            //user.set_id(userToUpdate.get().get_id());
+            // attach id to prevent a new user with the same email being created
+            user.set_id(userToUpdate.get().get_id());
             // encode ssn
             user.setSsn(passwordEncoder.encode(user.getSsn()));
             // set role to user
