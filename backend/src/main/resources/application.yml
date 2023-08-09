@@ -5,20 +5,14 @@ spring:
              
     data:
         mongodb:
-                uri: ${MONGO_CONNECT}
-                #uri: ${AWS_CONNECT}
-                database: ${MONGO_DB}
-                #database: ${AWS_DB}
+                #uri: ${MONGO_CONNECT}
+                uri: ${AWS_CONNECT}
+                #database: ${MONGO_DB}
+                database: ${AWS_DB}
                 
     output:
         ansi:
             enabled: ALWAYS            
-    
-#javax:
-    #net:
-        #ssl:
-            #trustStore: ${TRUST_STORE}
-            #trustStorePassword: ${TRUST_STORE_PS}
 
     security:
         oauth2:
@@ -27,6 +21,12 @@ spring:
                     google:
                         clientId: ${OATH2_CLIENT}
                         clientSecret: ${OATH2_SECRET}
+                        
+javax:
+    net:
+        ssl:
+            trustStore: ${TRUST_STORE}
+            trustStorePassword: ${TRUST_STORE_PS}
                                                                          
 # setting the logging level
 logging:
