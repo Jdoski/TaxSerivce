@@ -1,5 +1,6 @@
 package com.skillstorm.backend.controllers;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +38,14 @@ public class UserController {
     @Autowired
     private OAuth2AuthorizedClientService clientService;
 
-    /*      INTEND TO DELETE
+
     // return all users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.findAllUsers();
 
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
-    }*/
+    }
 
     // return a user by their id
     @GetMapping("/user/{id}")

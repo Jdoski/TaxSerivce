@@ -1,5 +1,6 @@
 package com.skillstorm.backend.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,12 @@ public class UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    /*
-     * INTEND TO DELETE
-     * // return all users
-     * public List<User> findAllUsers() {
-     * return userRepo.findAll();
-     * }
-     */
+    
+    // return all users
+    public List<User> findAllUsers() {
+     return userRepo.findAll();
+    }
+    
 
     // return user by their id
     public User findUserById(String id) {

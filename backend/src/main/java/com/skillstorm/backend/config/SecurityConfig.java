@@ -39,12 +39,10 @@ public class SecurityConfig {
           .httpBasic();*/
          
 
-        http
-                .authorizeHttpRequests(authorizeHttpRequests -> {
-
-                    // all requests coming in require authentication
-                    authorizeHttpRequests.anyRequest().authenticated();
-                    //authorizeHttpRequests.anyRequest().permitAll();
+        http.authorizeHttpRequests(authorizeHttpRequests -> {
+                // all requests coming in require authentication
+                authorizeHttpRequests.anyRequest().authenticated();
+                //authorizeHttpRequests.anyRequest().permitAll();
                 })
                 .csrf(csrf -> csrf.disable()) // just to set up login
                 // when oauth is involved, you need to manually configure cors to allow react
@@ -54,13 +52,9 @@ public class SecurityConfig {
 
                         // configuring how we want to handle cors
                         CorsConfiguration corsConfig = new CorsConfiguration();
-                        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:5173")); // what origins are
-                                                                                              // allowed
-                        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); // what http
-                                                                                                     // methods are
-                                                                                                     // allowed
-                        corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // what headers
-                                                                                                      // are allowed
+                        corsConfig.setAllowedOrigins(Arrays.asList("http://localhost:5173")); 
+                        corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE")); 
+                        corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); 
                         corsConfig.setAllowCredentials(true); // allow cookies to be sent to backend
                         corsConfig.setMaxAge(3600L); // how long to cache the cors preflight request (OPTIONS)
 

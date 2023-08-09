@@ -11,7 +11,7 @@ import {
 } from "@trussworks/react-uswds";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../features/userSlice";
+import { logout } from "../app/features/user/userSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Accordion from "../components/Accordion";
@@ -20,9 +20,9 @@ import Form1099 from "../components/Form1099";
 
 export default function GenerateReport() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const isSignedIn = useSelector((state: any) => state.user.isLoggedIn);
+  const isSignedIn = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user.user);
+  const user = useSelector((state: any) => state.user);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
