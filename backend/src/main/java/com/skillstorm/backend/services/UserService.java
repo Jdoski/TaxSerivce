@@ -74,7 +74,7 @@ public class UserService {
             return userExists.get();
         } else {
             // save to db
-            User newUser = userRepo.save(new User(email, "ROLE_USER"));
+            User newUser = userRepo.save(new User(email, "ROLE_NewUser"));
             return newUser;
         }
     }
@@ -94,10 +94,11 @@ public class UserService {
 
     public User updateUser(User user) {
 
-        // Optional<User> userToUpdate = userRepo.findById(user.get_id());
-        Optional<User> userToUpdate = userRepo.findByEmail(user.getUsername());
+        Optional<User> userToUpdate = userRepo.findByEmail(user.getEmail());
 
         if (userToUpdate.isPresent()) {
+            // attach id
+            //user.set_id(userToUpdate.get().get_id());
             // encode ssn
             user.setSsn(passwordEncoder.encode(user.getSsn()));
             // set role to user
