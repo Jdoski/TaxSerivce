@@ -43,8 +43,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeHttpRequests -> {
 
                     // all requests coming in require authentication
-                    //authorizeHttpRequests.anyRequest().authenticated();
-                    authorizeHttpRequests.anyRequest().permitAll();
+                    authorizeHttpRequests.anyRequest().authenticated();
+                    //authorizeHttpRequests.anyRequest().permitAll();
                 })
                 .csrf(csrf -> csrf.disable()) // just to set up login
                 // when oauth is involved, you need to manually configure cors to allow react
