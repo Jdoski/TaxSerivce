@@ -219,7 +219,7 @@ export default function Account() {
       ]
     : [
         <Button
-          data-value="login"
+          data-value="../login"
           onClick={routeChange}
           type="button"
           style={{ margin: 10 }}

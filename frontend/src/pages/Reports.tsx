@@ -95,7 +95,7 @@ export default function Reports() {
       ]
     : [
         <Button
-          data-value="login"
+          data-value="../login"
           onClick={routeChange}
           type="button"
           style={{ margin: 10 }}
@@ -105,24 +105,6 @@ export default function Reports() {
           </a>
         </Button>,
       ];
-
-  const returnToTop = (
-    <GridContainer className="usa-footer__return-to-top">
-      <a href="#">Return to top</a>
-    </GridContainer>
-  );
-
-  const footerPrimary = (
-    <FooterNav
-      aria-label="Footer navigation"
-      size="medium"
-      links={Array(5).fill(
-        <a href="" className="usa-footer__primary-link">
-          Primary link
-        </a>
-      )}
-    />
-  );
 
   return (
     <>
@@ -160,6 +142,16 @@ export default function Reports() {
               Tax Returns
             </h2>
           </Grid>
+          <h5
+            style={{
+              margin: 20,
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            *All reports are estimates, not a substitute for officially filing
+            tax returns
+          </h5>
           <Grid className="flex-justify-center" row>
             <Button
               data-value="../generate-report"
@@ -178,12 +170,6 @@ export default function Reports() {
           </GridContainer>
         </section>
       </main>
-
-      <Footer
-        returnToTop={returnToTop}
-        primary={footerPrimary}
-        secondary={null}
-      />
     </>
   );
 }
