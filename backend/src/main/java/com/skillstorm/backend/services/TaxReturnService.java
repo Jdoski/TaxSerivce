@@ -11,7 +11,6 @@ import com.skillstorm.backend.models.IncomeSource;
 import com.skillstorm.backend.models.TaxReturn;
 import com.skillstorm.backend.repositories.TaxReturnRepository;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +75,11 @@ public class TaxReturnService {
         if(returnToUpdate.isPresent()) {
             //use hashmap for deduction
             taxReturn.setDeduction(deduction(taxReturn.getFiling_status()));
+            //update the income sources
+            incomeSourceService.updateReturn(taxReturn);
+            //set the taxes
+            setTaxes(taxReturn);
+
             return taxReturnRepo.save(taxReturn);
         }
         else {
@@ -214,5 +218,27 @@ public class TaxReturnService {
         source.remove(deleteId);
         return source;
     }
+    /* 
+    public TaxReturn updateIncomeSource(TaxReturn taxReturn){
+        ArrayList<IncomeSource> source = taxReturn.getIncome_sources();
+
+        Query query = new Query();
+        // getting the tax return from the database
+        query.addCriteria(Criteria.where("_id").is(taxReturn.getId()));
+        // finding the income source in the tax return
+        //query.addCriteria(Criteria.where("income_sources").is(incomeSource.getSourceid()));
+
+        Update update = new Update();
+
+        return taxReturn;
+    }*/
+
+    public void updateIncomeSource(TaxReturn taxReturn){
+        //subtract current numbers
+        //incomeSourceService.subtractingIncome(taxReturn);
+        //add new income/withholding
+        incomeSourceService.updateReturn(taxReturn);
+    }
+
 
 }

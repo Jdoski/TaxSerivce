@@ -5,13 +5,10 @@ import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import java.util.HashSet;
 
 @Document(collection = "users")
-public class User implements UserDetails {
+public class User{
 
     // Mongo will generate _id
     @MongoId
@@ -24,7 +21,7 @@ public class User implements UserDetails {
     private String streetPrimary;
     private String city;
     private String state;
-    private int zipcode;
+    private String zipcode;
     private String role;
 
     public User(String email, String role) {
@@ -33,7 +30,7 @@ public class User implements UserDetails {
     }
 
     public User(String firstName, String lastName, String ssn, String dateOfBirth, String email,
-            String streetPrimary, String city, String state, int zipcode, String role) {
+            String streetPrimary, String city, String state, String zipcode, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
@@ -113,11 +110,11 @@ public class User implements UserDetails {
         this.state = state;
     }
 
-    public int getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(int zipcode) {
+    public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
 
@@ -141,6 +138,13 @@ public class User implements UserDetails {
     // User Details methods
 
     @Override
+    public String toString() {
+        return "User [_id=" + _id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn
+                + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", streetPrimary=" + streetPrimary + ", city="
+                + city + ", state=" + state + ", zipcode=" + zipcode + ", role=" + role + "]";
+    }
+
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -153,7 +157,7 @@ public class User implements UserDetails {
         result = prime * result + ((streetPrimary == null) ? 0 : streetPrimary.hashCode());
         result = prime * result + ((city == null) ? 0 : city.hashCode());
         result = prime * result + ((state == null) ? 0 : state.hashCode());
-        result = prime * result + zipcode;
+        result = prime * result + ((zipcode == null) ? 0 : zipcode.hashCode());
         result = prime * result + ((role == null) ? 0 : role.hashCode());
         return result;
     }
@@ -212,7 +216,10 @@ public class User implements UserDetails {
                 return false;
         } else if (!state.equals(other.state))
             return false;
-        if (zipcode != other.zipcode)
+        if (zipcode == null) {
+            if (other.zipcode != null)
+                return false;
+        } else if (!zipcode.equals(other.zipcode))
             return false;
         if (role == null) {
             if (other.role != null)
@@ -221,54 +228,4 @@ public class User implements UserDetails {
             return false;
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "User [_id=" + _id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn
-                + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", streetPrimary=" + streetPrimary + ", city="
-                + city + ", state=" + state + ", zipcode=" + zipcode + ", role=" + role + "]";
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        SimpleGrantedAuthority userRole = new SimpleGrantedAuthority(this.role);
-        authorities.add(userRole);
-
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    // included because userdetails requires it
-    @Override
-    public String getPassword() {
-        return "password not needed";
-    }
-
-    
-
 }

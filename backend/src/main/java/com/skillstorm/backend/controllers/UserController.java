@@ -1,11 +1,15 @@
 package com.skillstorm.backend.controllers;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,9 +71,9 @@ public class UserController {
 
     // create a user
     @PostMapping("/user")
-    public ResponseEntity<String> createUser(@RequestBody User user) {
-        String result = userService.createUser(user);
-        return new ResponseEntity<String>(result, HttpStatus.CREATED);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User result = userService.createUser(user);
+        return new ResponseEntity<User>(result, HttpStatus.CREATED);
     }
 
     /*
@@ -122,6 +126,18 @@ public class UserController {
             return client.getAccessToken().getTokenValue();
         }
         return "Access Token Not Found";
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<User> getUserByEmail(@AuthenticationPrincipal OAuth2User user) {
+        String email = user.getAttribute("email");
+        User userByEmail = userService.findUserByEmail(email);
+        return new ResponseEntity<User>(userByEmail, HttpStatus.OK);
+    }
+
+    @GetMapping("/info")
+    public Map<String, Object> userInfo(@AuthenticationPrincipal OAuth2User user){
+        return user.getAttributes();
     }
 
 }
