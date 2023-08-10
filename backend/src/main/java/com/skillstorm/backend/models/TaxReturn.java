@@ -1,5 +1,6 @@
 package com.skillstorm.backend.models;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -19,7 +20,7 @@ public class TaxReturn {
     private double taxable_income;
     private double tax_bill;
     private double tax_due;
-    private IncomeSource[] income_sources;
+    private ArrayList<IncomeSource> income_sources;
 
     public TaxReturn() {
     }
@@ -30,8 +31,10 @@ public class TaxReturn {
         this.filing_status = filing_status;
     }
 
-    public TaxReturn(String userid, String tax_year, String filing_status, double deduction, double income,
-            double withheld, double taxable_income, double tax_bill, double tax_due, IncomeSource[] income_sources) {
+    public TaxReturn(String id, String userid, String tax_year, String filing_status, double deduction, double income,
+            double withheld, double taxable_income, double tax_bill, double tax_due,
+            ArrayList<IncomeSource> income_sources) {
+        this.id = id;
         this.userid = userid;
         this.tax_year = tax_year;
         this.filing_status = filing_status;
@@ -123,12 +126,12 @@ public class TaxReturn {
     public void setTax_due(double tax_due) {
         this.tax_due = tax_due;
     }
-
-    public IncomeSource[] getIncome_sources() {
+    
+    public ArrayList<IncomeSource> getIncome_sources() {
         return income_sources;
     }
 
-    public void setIncome_sources(IncomeSource[] income_sources) {
+    public void setIncome_sources(ArrayList<IncomeSource> income_sources) {
         this.income_sources = income_sources;
     }
 
@@ -153,7 +156,7 @@ public class TaxReturn {
         result = prime * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(tax_due);
         result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + Arrays.hashCode(income_sources);
+        result = prime * result + ((income_sources == null) ? 0 : income_sources.hashCode());
         return result;
     }
 
@@ -198,7 +201,10 @@ public class TaxReturn {
             return false;
         if (Double.doubleToLongBits(tax_due) != Double.doubleToLongBits(other.tax_due))
             return false;
-        if (!Arrays.equals(income_sources, other.income_sources))
+        if (income_sources == null) {
+            if (other.income_sources != null)
+                return false;
+        } else if (!income_sources.equals(other.income_sources))
             return false;
         return true;
     }
@@ -208,7 +214,7 @@ public class TaxReturn {
         return "TaxReturn [id=" + id + ", userid=" + userid + ", tax_year=" + tax_year + ", filing_status="
                 + filing_status + ", deduction=" + deduction + ", income=" + income + ", withheld=" + withheld
                 + ", taxable_income=" + taxable_income + ", tax_bill=" + tax_bill + ", tax_due=" + tax_due
-                + ", income_sources=" + Arrays.toString(income_sources) + "]";
+                + ", income_sources=" + income_sources + "]";
     }
-
+    
 }

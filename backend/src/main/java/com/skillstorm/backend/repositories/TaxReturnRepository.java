@@ -19,5 +19,6 @@ public interface TaxReturnRepository extends MongoRepository<TaxReturn, String> 
     // Return one return that matches the returnid
     Optional<TaxReturn> findById(String returnid);
 
-    // Add to the income_sources array
+    // Remove from the income sources array
+    
 }

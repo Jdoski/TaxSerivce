@@ -29,7 +29,7 @@ import com.skillstorm.backend.services.UserService;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin(allowCredentials = "true", originPatterns = "http://localhost:5173")
+@CrossOrigin("*")
 public class UserController {
     
     @Autowired
@@ -79,9 +79,9 @@ public class UserController {
 
     // create a user
     @PostMapping("/user")
-    public ResponseEntity<String> createUser(@RequestBody User user) {
-        String result = userService.createUser(user);
-        return new ResponseEntity<String>(result, HttpStatus.CREATED);
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User result = userService.createUser(user);
+        return new ResponseEntity<User>(result, HttpStatus.CREATED);
     }
 
     /*
@@ -104,11 +104,11 @@ public class UserController {
     public String helloWorld() {
         return "Hello World";
     }
-
+    /* INTEND TO DELETE
     @GetMapping("/info")
     public Map<String, Object> userInfo(@AuthenticationPrincipal OAuth2User user){
         return user.getAttributes();
-    }
+    } */
 
     @GetMapping("/accessToken")
     public String accessToken(Authentication auth) {
@@ -134,6 +134,18 @@ public class UserController {
             return client.getAccessToken().getTokenValue();
         }
         return "Access Token Not Found";
+    }
+
+    @GetMapping("/email")
+    public ResponseEntity<User> getUserByEmail(@AuthenticationPrincipal OAuth2User user) {
+        String email = user.getAttribute("email");
+        User userByEmail = userService.findUserByEmail(email);
+        return new ResponseEntity<User>(userByEmail, HttpStatus.OK);
+    }
+
+    @GetMapping("/info")
+    public Map<String, Object> userInfo(@AuthenticationPrincipal OAuth2User user){
+        return user.getAttributes();
     }
 
 }

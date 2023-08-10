@@ -13,12 +13,6 @@ spring:
     output:
         ansi:
             enabled: ALWAYS            
-    
-#javax:
-    #net:
-        #ssl:
-            #trustStore: ${TRUST_STORE}
-            #trustStorePassword: ${TRUST_STORE_PS}
 
     security:
         oauth2:
@@ -27,9 +21,23 @@ spring:
                     google:
                         clientId: ${OATH2_CLIENT}
                         clientSecret: ${OATH2_SECRET}
+                        
+javax:
+    net:
+        ssl:
+            trustStore: ${TRUST_STORE}
+            trustStorePassword: ${TRUST_STORE_PS}
                                                                          
 # setting the logging level
 logging:
     level:
         com:
             skillstorm: debug               # sets the logging level for the entire package
+
+#server:
+ #   ssl:
+  #      key-store: KS
+   #     key-store-password: KSP
+    #    key-store-type: KST
+     #   key-alias: KA
+      #  key-password: KP

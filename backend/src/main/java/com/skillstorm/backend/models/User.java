@@ -5,13 +5,11 @@ import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import java.util.HashSet;
 
 @Document(collection = "users")
-public class User {
+public class User{
+
 
     // Mongo will generate _id
     @MongoId
@@ -140,7 +138,31 @@ public class User {
  
     // User Details methods
 
-  
+
+    @Override
+    public String toString() {
+        return "User [_id=" + _id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn
+                + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", streetPrimary=" + streetPrimary + ", city="
+                + city + ", state=" + state + ", zipcode=" + zipcode + ", role=" + role + "]";
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((_id == null) ? 0 : _id.hashCode());
+        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+        result = prime * result + ((ssn == null) ? 0 : ssn.hashCode());
+        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result + ((streetPrimary == null) ? 0 : streetPrimary.hashCode());
+        result = prime * result + ((city == null) ? 0 : city.hashCode());
+        result = prime * result + ((state == null) ? 0 : state.hashCode());
+        result = prime * result + ((zipcode == null) ? 0 : zipcode.hashCode());
+        result = prime * result + ((role == null) ? 0 : role.hashCode());
+        return result;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -196,7 +218,10 @@ public class User {
                 return false;
         } else if (!state.equals(other.state))
             return false;
-        if (zipcode != other.zipcode)
+        if (zipcode == null) {
+            if (other.zipcode != null)
+                return false;
+        } else if (!zipcode.equals(other.zipcode))
             return false;
         if (role == null) {
             if (other.role != null)
@@ -204,12 +229,5 @@ public class User {
         } else if (!role.equals(other.role))
             return false;
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "User [_id=" + _id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn
-                + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", streetPrimary=" + streetPrimary + ", city="
-                + city + ", state=" + state + ", zipcode=" + zipcode + ", role=" + role + "]";
     }
 }

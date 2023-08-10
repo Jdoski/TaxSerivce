@@ -41,6 +41,17 @@ public class UserService {
     }
 
     // return user by their email
+    public User findUserByEmail(String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
+    }
+
+    // return user by their email
     public User loadUserByUsername(String email) {
         Optional<User> user = userRepo.findByEmail(email);
 
@@ -52,10 +63,14 @@ public class UserService {
     }
 
     // create a user
-    public String createUser(User user) {
+
+  
+
+    public User createUser(User user) {
+
         Optional<User> userExists = userRepo.findByEmail(user.getEmail());
         if (userExists.isPresent()) {
-            return "Email account already exists";
+            return null;
         } else {
             // encode ssn
             user.setSsn(passwordEncoder.encode(user.getSsn()));
@@ -63,7 +78,7 @@ public class UserService {
             user.setRole("ROLE_USER");
             // save to db
             userRepo.save(user);
-            return "User created";
+            return user;
         }
     }
 

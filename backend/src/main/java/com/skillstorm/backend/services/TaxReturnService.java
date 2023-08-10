@@ -1,11 +1,17 @@
 package com.skillstorm.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import com.skillstorm.backend.models.IncomeSource;
 import com.skillstorm.backend.models.TaxReturn;
 import com.skillstorm.backend.repositories.TaxReturnRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +24,9 @@ public class TaxReturnService {
 
     @Autowired
     IncomeSourceService incomeSourceService;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
 
     // show all returns in the db
@@ -66,6 +75,11 @@ public class TaxReturnService {
         if(returnToUpdate.isPresent()) {
             //use hashmap for deduction
             taxReturn.setDeduction(deduction(taxReturn.getFiling_status()));
+            //update the income sources
+            incomeSourceService.updateReturn(taxReturn);
+            //set the taxes
+            setTaxes(taxReturn);
+
             return taxReturnRepo.save(taxReturn);
         }
         else {
@@ -190,5 +204,41 @@ public class TaxReturnService {
         }
         return tax;
     }
+
+    public void removeIncomeSource(TaxReturn taxReturn, String deleteId){
+
+        Query query = Query.query(Criteria.where("_id").is(taxReturn.getId()));
+        //Update update = Update.update(taxReturn.getIncome_sources(), deleteId);
+
+        mongoTemplate.updateFirst(query, new Update().pull("income_sources", deleteId), "returns");
+    }
+
+    public ArrayList<IncomeSource> removeOneIncomeSource(TaxReturn taxReturn, String deleteId){
+        ArrayList<IncomeSource> source = taxReturn.getIncome_sources();
+        source.remove(deleteId);
+        return source;
+    }
+    /* 
+    public TaxReturn updateIncomeSource(TaxReturn taxReturn){
+        ArrayList<IncomeSource> source = taxReturn.getIncome_sources();
+
+        Query query = new Query();
+        // getting the tax return from the database
+        query.addCriteria(Criteria.where("_id").is(taxReturn.getId()));
+        // finding the income source in the tax return
+        //query.addCriteria(Criteria.where("income_sources").is(incomeSource.getSourceid()));
+
+        Update update = new Update();
+
+        return taxReturn;
+    }*/
+
+    public void updateIncomeSource(TaxReturn taxReturn){
+        //subtract current numbers
+        //incomeSourceService.subtractingIncome(taxReturn);
+        //add new income/withholding
+        incomeSourceService.updateReturn(taxReturn);
+    }
+
 
 }
