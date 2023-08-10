@@ -27,12 +27,17 @@ public class SecurityConfig {
         return http
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> {
-                    auth.anyRequest().authenticated();
-                    //auth.anyRequest().permitAll();
+                    auth.anyRequest().permitAll();
+                    //auth.mvcMatchers("/users/hello").permitAll();
+                    //auth.mvcMatchers("/signin").permitAll();
+                    //auth.mvcMatchers("/**").authenticated();
+                    //auth.anyRequest().authenticated();
+
                 })
                 .csrf((csrf) ->
                     // the CSRF filter will check for the csrf token on every modifying request except for signin
-                    csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).ignoringAntMatchers("/signin"))
+                    //csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).ignoringAntMatchers("/signin"))
+                    csrf.disable())
                 .oauth2Login(withDefaults())
                 .build();
     }

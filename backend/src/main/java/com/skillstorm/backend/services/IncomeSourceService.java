@@ -14,16 +14,18 @@ public class IncomeSourceService {
 
     @Autowired
     IncomeSourceRepository incomeSourceRepo;
-/*
-    //create an income source and insert into return
-    public void createIncomeSource(String returnid, IncomeSource incomeSource) {
-        TaxReturn returnToUpdate = taxReturnService.findOneReturnByReturnid(returnid).get();
-        returnToUpdate.setIncomeSource(incomeSource);
-    }*/
+    /*
+     * //create an income source and insert into return
+     * public void createIncomeSource(String returnid, IncomeSource incomeSource) {
+     * TaxReturn returnToUpdate =
+     * taxReturnService.findOneReturnByReturnid(returnid).get();
+     * returnToUpdate.setIncomeSource(incomeSource);
+     * }
+     */
 
     public void createIncomeSource(TaxReturn taxReturn) {
         ArrayList<IncomeSource> incomeSourceList = taxReturn.getIncome_sources();
-        for(int i = 0; i < incomeSourceList.size(); i++) {
+        for (int i = 0; i < incomeSourceList.size(); i++) {
             incomeSourceRepo.save(incomeSourceList.get(i));
             updatingIncome(taxReturn, incomeSourceList.get(i));
             deleteIncomeSource(incomeSourceList.get(i));
@@ -37,12 +39,31 @@ public class IncomeSourceService {
         taxReturn.setWithheld(taxReturn.getWithheld() + sourceWithheld);
     }
 
-    public void deleteIncomeSource(IncomeSource incomeSource){
+    public void subtractingIncome(TaxReturn taxReturn) {
+        ArrayList<IncomeSource> incomeSourceList = taxReturn.getIncome_sources();
+
+        for (int i = 0; i < incomeSourceList.size(); i++) {
+            taxReturn.setIncome(taxReturn.getIncome() - incomeSourceList.get(i).getIncome());
+            taxReturn.setWithheld(taxReturn.getWithheld() - incomeSourceList.get(i).getWithheld());
+        }
+    }
+
+    public void updateReturn(TaxReturn taxReturn) {
+        taxReturn.setIncome(0);
+        taxReturn.setWithheld(0);
+        ArrayList<IncomeSource> incomeSourceList = taxReturn.getIncome_sources();
+        for (int i = 0; i < incomeSourceList.size(); i++) {
+            updatingIncome(taxReturn, incomeSourceList.get(i));
+        }
+
+    }
+
+    public void deleteIncomeSource(IncomeSource incomeSource) {
         incomeSourceRepo.delete(incomeSource);
     }
 
     // delete an income source off a return
-    public void deleteIncomeSourceFromReturn(TaxReturn taxReturn, String deletionId){
+    public void deleteIncomeSourceFromReturn(TaxReturn taxReturn, String deletionId) {
 
     }
 
