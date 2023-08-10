@@ -1,10 +1,21 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userReducer from "../features/userSlice";
+import userReducer from "./features/user/userSlice";
+import storage from "redux-persist/lib/storage";
+import { persistReducer, persistStore } from "redux-persist";
+import thunk from "redux-thunk";
+
+const persistConfig = {
+  key: "root",
+  storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, userReducer);
 
 export const store = configureStore({
-  reducer: {
-    user: userReducer,
-  },
+  reducer: persistedReducer,
+  middleware: [thunk],
 });
 
-export default store;
+export const persistor = persistStore(store);
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

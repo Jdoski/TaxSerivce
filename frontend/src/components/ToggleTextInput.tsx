@@ -1,17 +1,13 @@
-import {
-  Button,
-  Grid,
-  GridContainer,
-  Label,
-  TextInput,
-} from "@trussworks/react-uswds";
-import React, { useState } from "react";
+import { Grid, GridContainer, Label, TextInput } from "@trussworks/react-uswds";
+import React from "react";
 
 interface TextInputProps {
   label: string;
   id: string;
   type: any;
   defaultValue: string;
+  disabled: boolean;
+  onChange: any;
 }
 
 const ToggleableTextInput: React.FC<TextInputProps> = ({
@@ -19,38 +15,32 @@ const ToggleableTextInput: React.FC<TextInputProps> = ({
   id,
   type,
   defaultValue,
+  disabled,
+  onChange,
 }) => {
-  const [disabled, setDisabled] = useState(true);
-
-  const handleToggle = () => {
-    setDisabled((prevDisabled) => !prevDisabled);
-  };
-
   return (
     <div>
       <>
         <GridContainer>
-          <Label className="usa-label" htmlFor={id}>
+          <Label
+            style={{ margin: "auto", marginBottom: 5 }}
+            className="usa-label"
+            htmlFor={id}
+          >
             {label}
           </Label>
           <Grid row>
             <TextInput
+              key={id}
               className="usa-input"
-              style={{}}
+              style={{ margin: "auto" }}
               id={id}
               name={id}
               type={type}
               defaultValue={defaultValue}
               disabled={disabled}
+              onChange={onChange}
             />
-            <Button
-              type="button"
-              className="usa-button usa-button--outline"
-              style={{ margin: 9 }}
-              onClick={handleToggle}
-            >
-              {disabled ? "Enable" : "Disable"}
-            </Button>
           </Grid>
         </GridContainer>
       </>

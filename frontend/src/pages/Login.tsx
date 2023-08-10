@@ -1,46 +1,24 @@
 import {
   Button,
-  Checkbox,
-  Fieldset,
-  Footer,
-  Form,
-  GovBanner,
   Grid,
   GridContainer,
   Header,
-  Identifier,
-  IdentifierGov,
-  IdentifierIdentity,
-  IdentifierLink,
-  IdentifierLinkItem,
-  IdentifierLinks,
-  IdentifierLogo,
-  IdentifierLogos,
-  IdentifierMasthead,
-  Label,
-  Link,
-  MediaBlockBody,
-  TextInput,
   Title,
 } from "@trussworks/react-uswds";
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { login, logout } from "../features/userSlice";
+import { login } from "../app/features/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../app/store";
 
 export default function CreateAccount() {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const isSignedIn = useSelector((state: any) => state.user.isLoggedIn);
-  const user = useSelector((state: any) => state.user.user);
+  const isSignedIn = useSelector((state: RootState) => state.isLoggedIn);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = (e: any) => {
-    e.preventDefault();
-    // Simulating a login action with a user object
-    const user = { id: 1, username: "john_doe" };
+    window.location.replace("http://localhost:8080/signin");
     dispatch(login(user));
-    navigate("/");
   };
 
   return (

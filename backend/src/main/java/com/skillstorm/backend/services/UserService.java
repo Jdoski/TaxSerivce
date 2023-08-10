@@ -1,5 +1,6 @@
 package com.skillstorm.backend.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,12 @@ public class UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    /*
-     * INTEND TO DELETE
-     * // return all users
-     * public List<User> findAllUsers() {
-     * return userRepo.findAll();
-     * }
-     */
+    
+    // return all users
+    public List<User> findAllUsers() {
+     return userRepo.findAll();
+    }
+    
 
     // return user by their id
     public User findUserById(String id) {
@@ -63,7 +63,11 @@ public class UserService {
     }
 
     // create a user
+
+  
+
     public User createUser(User user) {
+
         Optional<User> userExists = userRepo.findByEmail(user.getEmail());
         if (userExists.isPresent()) {
             return null;
@@ -127,6 +131,17 @@ public class UserService {
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
         String email = user.getAttribute("email");
         createUserByEmail(email);
+    }
+
+    // returns the user by the email address
+    public User findUserByEmail(String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
     }
 
 }

@@ -10,6 +10,7 @@ import java.util.HashSet;
 @Document(collection = "users")
 public class User{
 
+
     // Mongo will generate _id
     @MongoId
     private String _id;
@@ -136,6 +137,7 @@ public class User{
 
  
     // User Details methods
+
 
     @Override
     public String toString() {

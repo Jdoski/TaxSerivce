@@ -12,19 +12,19 @@ import {
 } from "@trussworks/react-uswds";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../features/userSlice";
+import { logout } from "../app/features/user/userSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const isSignedIn = useSelector((state: any) => state.user.isLoggedIn);
+  const isSignedIn = useSelector((state: any) => state.isLoggedIn);
+  const user = null;
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user.user);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const URL = "http://localhost:5173/";
+  const URL = "http://localhost:8080/users/user/64d0247ff92a0477212386d5";
 
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
@@ -59,6 +59,11 @@ export default function Home() {
     i18n.changeLanguage(lng);
   }, []);
 
+  function getData() {
+    fetch(URL, { credentials: "include", method: "get" })
+      .then((data) => data.json())
+      .then((data) => console.log(data));
+  }
   const lng = navigator.language;
 
   const primaryNavItems = isSignedIn
@@ -77,7 +82,11 @@ export default function Home() {
         >
           <span>{t("nav.account")}</span>
         </a>,
-        <a key="primaryNav_2" className="usa-nav__link">
+        <a
+          key="primaryNav_2"
+          href="http://localhost:5173/reports"
+          className="usa-nav__link"
+        >
           <span>{t("nav.reports")}</span>
         </a>,
       ]
@@ -108,9 +117,7 @@ export default function Home() {
           type="button"
           style={{ margin: 10 }}
         >
-          <a key="secondaryNav_0" href="" style={{ color: "white" }}>
-            {t("btn.login")}
-          </a>
+          {t("btn.login")}
         </Button>,
       ];
 
@@ -245,9 +252,9 @@ export default function Home() {
               why they should get in touch here, and use an active verb on the
               button below. “Get in touch,” “Learn more,” and so on.
             </p>
-            <a href="#" className="usa-button usa-button--big">
-              Call to action
-            </a>
+            <Button type="button" onClick={getData}>
+              Get Data
+            </Button>
           </GridContainer>
         </section>
       </main>

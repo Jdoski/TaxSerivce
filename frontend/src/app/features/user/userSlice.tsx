@@ -1,8 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import type { RootState } from "../../store";
 
 interface User {
-  id: number;
-  username: string;
+  username: String;
 }
 
 interface UserState {
@@ -13,9 +14,9 @@ interface UserState {
 const initialState: UserState = {
   isLoggedIn: false,
   user: null,
-};
+} as UserState;
 
-const userSlice = createSlice({
+export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {

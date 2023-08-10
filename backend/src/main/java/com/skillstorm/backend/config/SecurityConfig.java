@@ -34,7 +34,6 @@ public class SecurityConfig {
                     //auth.mvcMatchers("/signin").permitAll();
                     //auth.mvcMatchers("/**").authenticated();
                     //auth.anyRequest().authenticated();
-
                 })
                 .csrf((csrf) ->
                     // the CSRF filter will check for the csrf token on every modifying request except for signin
@@ -42,6 +41,7 @@ public class SecurityConfig {
                     csrf.disable())
                 .oauth2Login(withDefaults())
                 .build();
+
     }
 
     // encode sensitive information
