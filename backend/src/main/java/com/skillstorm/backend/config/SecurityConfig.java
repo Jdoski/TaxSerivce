@@ -25,15 +25,15 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                .requiresChannel(channel ->
-                    channel.anyRequest().requiresSecure())
+                //.requiresChannel(channel ->
+                //    channel.anyRequest().requiresSecure())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> {
-                    //auth.anyRequest().permitAll();
-                    auth.mvcMatchers("/users/hello").permitAll();
+                    auth.anyRequest().permitAll();
+                    //auth.mvcMatchers("/users/hello").permitAll();
                     //auth.mvcMatchers("/signin").permitAll();
                     //auth.mvcMatchers("/**").authenticated();
-                    auth.anyRequest().authenticated();
+                    //auth.anyRequest().authenticated();
 
                 })
                 .csrf((csrf) ->
