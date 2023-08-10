@@ -1,15 +1,11 @@
 package com.skillstorm.backend.controllers;
 
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -96,11 +92,11 @@ public class UserController {
     public String helloWorld() {
         return "Hello World";
     }
-
+    /* INTEND TO DELETE
     @GetMapping("/info")
     public Map<String, Object> userInfo(@AuthenticationPrincipal OAuth2User user){
         return user.getAttributes();
-    }
+    } */
 
     @GetMapping("/accessToken")
     public String accessToken(Authentication auth) {

@@ -1,3 +1,4 @@
+/*
 package com.skillstorm.backend.config;
 
 import org.omg.CORBA.Environment;
@@ -45,3 +46,4 @@ public class DocumentDBConf {
         return new MongoPropertiesClientSettingsBuilderCustomizer(properties, null);
     }
 }
+*/
