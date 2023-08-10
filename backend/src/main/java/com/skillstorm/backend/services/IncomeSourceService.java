@@ -7,6 +7,8 @@ import com.skillstorm.backend.models.IncomeSource;
 import com.skillstorm.backend.models.TaxReturn;
 import com.skillstorm.backend.repositories.IncomeSourceRepository;
 
+import java.util.ArrayList;
+
 @Service
 public class IncomeSourceService {
 
@@ -20,11 +22,11 @@ public class IncomeSourceService {
     }*/
 
     public void createIncomeSource(TaxReturn taxReturn) {
-        IncomeSource[] incomeSource = taxReturn.getIncome_sources();
-        System.out.println(incomeSource);
-        for(int i = 0; i < incomeSource.length; i++) {
-            incomeSourceRepo.save(incomeSource[i]);
-            updatingIncome(taxReturn, incomeSource[i]);
+        ArrayList<IncomeSource> incomeSourceList = taxReturn.getIncome_sources();
+        for(int i = 0; i < incomeSourceList.size(); i++) {
+            incomeSourceRepo.save(incomeSourceList.get(i));
+            updatingIncome(taxReturn, incomeSourceList.get(i));
+            deleteIncomeSource(incomeSourceList.get(i));
         }
     }
 
@@ -33,6 +35,15 @@ public class IncomeSourceService {
         double sourceWithheld = incomeSource.getWithheld();
         taxReturn.setIncome(taxReturn.getIncome() + sourceIncome);
         taxReturn.setWithheld(taxReturn.getWithheld() + sourceWithheld);
+    }
+
+    public void deleteIncomeSource(IncomeSource incomeSource){
+        incomeSourceRepo.delete(incomeSource);
+    }
+
+    // delete an income source off a return
+    public void deleteIncomeSourceFromReturn(TaxReturn taxReturn, String deletionId){
+
     }
 
 }

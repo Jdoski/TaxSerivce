@@ -13,7 +13,6 @@ import com.skillstorm.backend.services.UserService;
 @RequestMapping("/")
 @CrossOrigin(allowCredentials = "true", originPatterns = "http://localhost:5173")
 public class UserWebController {
-
     @Autowired
     UserService userService;
 
@@ -23,5 +22,4 @@ public class UserWebController {
         userService.getEmail();
         return new RedirectView("http://localhost:5173");
     }
-
 }

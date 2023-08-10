@@ -1,11 +1,18 @@
 package com.skillstorm.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import com.skillstorm.backend.models.IncomeSource;
 import com.skillstorm.backend.models.TaxReturn;
 import com.skillstorm.backend.repositories.TaxReturnRepository;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +25,9 @@ public class TaxReturnService {
 
     @Autowired
     IncomeSourceService incomeSourceService;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
 
 
     // show all returns in the db
@@ -189,6 +199,20 @@ public class TaxReturnService {
                 break;
         }
         return tax;
+    }
+
+    public void removeIncomeSource(TaxReturn taxReturn, String deleteId){
+
+        Query query = Query.query(Criteria.where("_id").is(taxReturn.getId()));
+        //Update update = Update.update(taxReturn.getIncome_sources(), deleteId);
+
+        mongoTemplate.updateFirst(query, new Update().pull("income_sources", deleteId), "returns");
+    }
+
+    public ArrayList<IncomeSource> removeOneIncomeSource(TaxReturn taxReturn, String deleteId){
+        ArrayList<IncomeSource> source = taxReturn.getIncome_sources();
+        source.remove(deleteId);
+        return source;
     }
 
 }
