@@ -33,3 +33,11 @@ logging:
     level:
         com:
             skillstorm: debug               # sets the logging level for the entire package
+
+#server:
+ #   ssl:
+  #      key-store: classpath:springboot.jks
+   #     key-store-password: password
+    #    key-store-type: jks
+     #   key-alias: springboot
+      #  key-password: password
