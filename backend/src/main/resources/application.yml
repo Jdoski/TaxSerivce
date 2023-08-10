@@ -36,8 +36,8 @@ logging:
 
 #server:
  #   ssl:
-  #      key-store: classpath:springboot.jks
-   #     key-store-password: password
-    #    key-store-type: jks
-     #   key-alias: springboot
-      #  key-password: password
+  #      key-store: KS
+   #     key-store-password: KSP
+    #    key-store-type: KST
+     #   key-alias: KA
+      #  key-password: KP
