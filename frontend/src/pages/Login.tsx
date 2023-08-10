@@ -8,15 +8,17 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../app/features/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { RootState } from "../app/store";
 
 export default function CreateAccount() {
-  const isSignedIn = useSelector((state: any) => state.isLoggedIn);
+  const isSignedIn = useSelector((state: RootState) => state.isLoggedIn);
+  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = (e: any) => {
     window.location.replace("http://localhost:8080/signin");
-    dispatch(login());
+    dispatch(login(user));
   };
 
   return (

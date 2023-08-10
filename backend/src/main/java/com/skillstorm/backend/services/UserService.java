@@ -42,7 +42,7 @@ public class UserService {
 
     // return user by their email
     public User loadUserByUsername(String email) {
-        Optional<User> user = userRepo.findByUsername(email);
+        Optional<User> user = userRepo.findByEmail(email);
 
         if (user.isPresent()) {
             return user.get();
@@ -53,7 +53,7 @@ public class UserService {
 
     // create a user
     public String createUser(User user) {
-        Optional<User> userExists = userRepo.findByEmail(user.getUsername());
+        Optional<User> userExists = userRepo.findByEmail(user.getEmail());
         if (userExists.isPresent()) {
             return "Email account already exists";
         } else {
@@ -116,6 +116,17 @@ public class UserService {
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
         String email = user.getAttribute("email");
         createUserByEmail(email);
+    }
+
+    // returns the user by the email address
+    public User findUserByEmail(String email) {
+        Optional<User> user = userRepo.findByEmail(email);
+
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
     }
 
 }

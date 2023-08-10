@@ -1,12 +1,18 @@
 import {
   Button,
+  ComboBox,
+  Dropdown,
   ExtendedNav,
   Footer,
   FooterNav,
+  Form,
   Grid,
   GridContainer,
   Header,
+  Label,
   NavMenuButton,
+  Table,
+  TextInput,
   Title,
 } from "@trussworks/react-uswds";
 import { useEffect, useState } from "react";
@@ -14,22 +20,39 @@ import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../app/features/user/userSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import Accordion from "../components/Accordion";
 import W2Form from "../components/W2Form";
 import Form1099 from "../components/Form1099";
 
+interface FormData {
+  income: number;
+  withheld: number;
+  employer: string;
+  employer_id: number;
+  form: string;
+  filingStatus: string;
+  year: number;
+}
+
+interface TableData extends FormData {
+  id: string;
+}
+
 export default function GenerateReport() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const isSignedIn = useSelector((state: any) => state.user);
+  const isSignedIn = useSelector((state: any) => state.isLoggedIn);
   const dispatch = useDispatch();
   const user = useSelector((state: any) => state.user);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-
   const URL = "http://localhost:5173/";
+  const [tableData, setTableData] = useState<TableData[]>([]);
 
-  const toggleMobileNav = (): void => {
-    setMobileNavOpen((prevOpen) => !prevOpen);
+  const handleFormSubmit = (formData: FormData) => {
+    const newEntry: TableData = {
+      id: new Date().getTime().toString(),
+      ...formData,
+    };
+    setTableData((prevData) => [...prevData, newEntry]);
   };
 
   const routeChange = (e: any) => {
@@ -61,6 +84,9 @@ export default function GenerateReport() {
     i18n.changeLanguage(lng);
   }, []);
 
+  function handleSubmit() {
+    //POST Request to db in order to send the reports
+  }
   const lng = navigator.language;
 
   return (
@@ -78,27 +104,65 @@ export default function GenerateReport() {
 
       <main id="main-content">
         <section className="grid-container usa-section">
-          <Grid
-            row
-            gap
-            className="margin-x-neg-205 margin-bottom-2 flex-justify-center"
-          >
-            <h2 className="font-heading-xl margin-top-0 tablet:margin-bottom-0">
-              Generate Report
-            </h2>
-          </Grid>
-          <Grid className="flex-justify-center" row>
-            <Form1099 name={"Add 1099 Form"} />
-            <W2Form name={"Add W2 From"} />
-            <Button
-              data-value="../reports"
-              type="button"
-              onClick={routeChange}
-              style={{ marginBottom: 20 }}
+          <GridContainer className="flex-justify-center">
+            <Grid
+              row
+              gap
+              className="margin-x-neg-205 margin-bottom-2 flex-justify-center"
             >
-              Cancel
-            </Button>
-          </Grid>
+              <h2 className="font-heading-xl margin-top-0 tablet:margin-bottom-0">
+                Generate Report
+              </h2>
+            </Grid>
+            <Grid className="flex-justify-center" row>
+              <Form1099 onSubmit={handleFormSubmit} />
+              <W2Form onSubmit={handleFormSubmit} />
+              <Button
+                data-value="../reports"
+                type="button"
+                onClick={routeChange}
+                style={{ marginBottom: 20 }}
+              >
+                Cancel
+              </Button>
+            </Grid>
+            <Grid className="flex-justify-center">
+              <Form onSubmit={handleSubmit} style={{ margin: "auto" }}>
+                <table
+                  className="usa-table flex-justify-start"
+                  style={{ width: "250%", marginTop: 30 }}
+                >
+                  <thead>
+                    <tr>
+                      <th scope="col">Form</th>
+                      <th scope="col">Filing Status</th>
+                      <th scope="col">Year</th>
+                      <th scope="col">Income</th>
+                      <th scope="col">Withheld</th>
+                      <th scope="col">Employer</th>
+                      <th scope="col">Employer ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tableData.map((data) => (
+                      <tr key={data.id}>
+                        <td>{data.form}</td>
+                        <td>{data.filingStatus}</td>
+                        <td>{data.year}</td>
+                        <td>${data.income}</td>
+                        <td>${data.withheld}</td>
+                        <td>{data.employer}</td>
+                        <td>{data.employer_id}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <Button type="submit" style={{ marginLeft: 75 }}>
+                  Submit Report
+                </Button>
+              </Form>
+            </Grid>
+          </GridContainer>
         </section>
       </main>
     </>

@@ -24,7 +24,7 @@ export default function Home() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const URL = "http://localhost:5173/";
+  const URL = "http://localhost:8080/users/user/64d0247ff92a0477212386d5";
 
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
@@ -59,6 +59,11 @@ export default function Home() {
     i18n.changeLanguage(lng);
   }, []);
 
+  function getData() {
+    fetch(URL, { credentials: "include", method: "get" })
+      .then((data) => data.json())
+      .then((data) => console.log(data));
+  }
   const lng = navigator.language;
 
   const primaryNavItems = isSignedIn
@@ -247,9 +252,9 @@ export default function Home() {
               why they should get in touch here, and use an active verb on the
               button below. “Get in touch,” “Learn more,” and so on.
             </p>
-            <a href="#" className="usa-button usa-button--big">
-              Call to action
-            </a>
+            <Button type="button" onClick={getData}>
+              Get Data
+            </Button>
           </GridContainer>
         </section>
       </main>

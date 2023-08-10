@@ -46,6 +46,13 @@ public class UserController {
 
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
+    // Returns user by email address
+    @GetMapping("/email")
+    public ResponseEntity<User> getUserByEmail(@AuthenticationPrincipal OAuth2User user) {
+        String email = user.getAttribute("email");
+        User userByEmail = userService.findUserByEmail(email);
+        return new ResponseEntity<User>(userByEmail, HttpStatus.OK);
+    }
 
     // return a user by their id
     @GetMapping("/user/{id}")

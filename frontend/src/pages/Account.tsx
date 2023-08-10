@@ -15,19 +15,118 @@ import { logout } from "../app/features/user/userSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import ToggleableTextInput from "../components/ToggleTextInput";
+import { RootState } from "../app/store";
+
+interface UserData {
+  firstName: string;
+  lastName: string;
+  ssn: string;
+  email: string;
+  dateOfBirth: string;
+  streetPrimary: string;
+  state: string;
+  city: string;
+  zipcode: string;
+}
 
 export default function Account() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const isSignedIn = useSelector((state: any) => state.isLoggedIn);
+  const isSignedIn = useSelector((state: RootState) => state.isLoggedIn);
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const [isDisabled, setDisabled] = useState(true);
+  const [userData, setUserData] = useState<UserData>({
+    firstName: "",
+    lastName: "",
+    ssn: "",
+    email: "",
+    dateOfBirth: "",
+    streetPrimary: "",
+    state: "",
+    city: "",
+    zipcode: "",
+  });
 
-  const URL = "http://localhost:5173/";
+  const URL = "http://localhost:8080/users/info";
+  const emailURL = "http://localhost:8080/users/email";
 
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleSave = () => {
+    sendData();
+    setDisabled(true); // Disable the inputs after saving
+  };
+
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+
+    // Update the corresponding state variable based on the input id
+    switch (id) {
+      case "first-name-value":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          firstName: value,
+        }));
+        break;
+      case "last-name-value":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          lastName: value,
+        }));
+        break;
+      case "ssn-value":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          ssn: value,
+        }));
+        break;
+      case "email-value":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          email: value,
+        }));
+        break;
+      case "dob-value":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          dateOfBirth: value,
+        }));
+        break;
+      case "address-value":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          streetPrimary: value,
+        }));
+        break;
+      case "city-value":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          city: value,
+        }));
+        break;
+      case "state-value":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          state: value,
+        }));
+        break;
+      case "zipcode-value":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          zipcode: value,
+        }));
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleToggle = () => {
+    setDisabled((prevDisabled) => !prevDisabled);
   };
 
   const routeChange = (e: any) => {
@@ -58,6 +157,31 @@ export default function Account() {
     const lng = navigator.language;
     i18n.changeLanguage(lng);
   }, []);
+
+  useEffect(() => {
+    fetch(emailURL, { credentials: "include", method: "get" })
+      .then((data) => data.json())
+      .then((data) => {
+        setUserData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, []);
+
+  const sendData = () => {
+    fetch("http://localhost:8080/users/user", {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    console.log(JSON.stringify(userData));
+  };
 
   const lng = navigator.language;
 
@@ -124,6 +248,38 @@ export default function Account() {
     />
   );
 
+  const editForm = isDisabled
+    ? [
+        <Button
+          key="edit"
+          style={{ margin: "auto", display: "flex", marginTop: 20 }}
+          type="button"
+          onClick={handleToggle}
+        >
+          Edit
+        </Button>,
+      ]
+    : [
+        <Grid row className="flex-justify-center" style={{ marginTop: 20 }}>
+          <Button
+            key={"save"}
+            style={{ marginTop: 20 }}
+            type="submit"
+            onClick={handleSave}
+          >
+            Save
+          </Button>
+          <Button
+            key="cancel"
+            style={{ marginTop: 20 }}
+            type="button"
+            onClick={handleToggle}
+          >
+            Cancel
+          </Button>
+        </Grid>,
+      ];
+
   return (
     <>
       <div className={`usa-overlay ${mobileNavOpen ? "is-visible" : ""}`}></div>
@@ -160,60 +316,81 @@ export default function Account() {
               User Account
             </h2>
           </Grid>
-          <ToggleableTextInput
-            label="First Name"
-            id="first-name-value"
-            type="text"
-            defaultValue="First Name"
-          />
-          <ToggleableTextInput
-            label="Last Name"
-            id="last-name-value"
-            type="text"
-            defaultValue="Last Name"
-          />
-          <ToggleableTextInput
-            label="Social Security Number (SSN)"
-            id="ssn-value"
-            type="password"
-            defaultValue="000-00-0000"
-          />
-          <ToggleableTextInput
-            label="Email Address"
-            id="email-value"
-            type="text"
-            defaultValue="default@gmail.com"
-          />
-          <ToggleableTextInput
-            label="Date of Birth (DOB)"
-            id="dob-value"
-            type="text"
-            defaultValue="01/01/2001"
-          />
-          <ToggleableTextInput
-            label="Address"
-            id="address-value"
-            type="text"
-            defaultValue="50 Drury Lane"
-          />
-          <ToggleableTextInput
-            label="City"
-            id="city-value"
-            type="text"
-            defaultValue="Far Far Away"
-          />
-          <ToggleableTextInput
-            label="State"
-            id="state-value"
-            type="text"
-            defaultValue="Forever Land"
-          />
-          <ToggleableTextInput
-            label="Zip Code"
-            id="zip-code-value"
-            type="number"
-            defaultValue="77777"
-          />
+          <Grid>
+            <ToggleableTextInput
+              label="First Name"
+              id="first-name-value"
+              type="text"
+              defaultValue={userData.firstName}
+              disabled={isDisabled}
+              onChange={handleTextChange}
+            />
+            <ToggleableTextInput
+              label="Last Name"
+              id="last-name-value"
+              type="text"
+              defaultValue={userData.lastName}
+              disabled={isDisabled}
+              onChange={handleTextChange}
+            />
+            <ToggleableTextInput
+              label="Social Security Number (SSN)"
+              id="ssn-value"
+              type="password"
+              defaultValue={userData.ssn}
+              disabled={isDisabled}
+              onChange={handleTextChange}
+            />
+            <ToggleableTextInput
+              label="Email Address"
+              id="email-value"
+              type="text"
+              defaultValue={userData.email}
+              disabled={isDisabled}
+              onChange={handleTextChange}
+            />
+            <ToggleableTextInput
+              label="Date of Birth (DOB)"
+              id="dob-value"
+              type="text"
+              defaultValue={userData.dateOfBirth}
+              disabled={isDisabled}
+              onChange={handleTextChange}
+            />
+            <ToggleableTextInput
+              label="Address"
+              id="address-value"
+              type="text"
+              defaultValue={userData.streetPrimary}
+              disabled={isDisabled}
+              onChange={handleTextChange}
+            />
+            <ToggleableTextInput
+              label="City"
+              id="city-value"
+              type="text"
+              defaultValue={userData.city}
+              disabled={isDisabled}
+              onChange={handleTextChange}
+            />
+            <ToggleableTextInput
+              label="State"
+              id="state-value"
+              type="text"
+              defaultValue={userData.state}
+              disabled={isDisabled}
+              onChange={handleTextChange}
+            />
+            <ToggleableTextInput
+              label="Zip Code"
+              id="zipcode-value"
+              type="text"
+              defaultValue={userData.zipcode}
+              disabled={isDisabled}
+              onChange={handleTextChange}
+            />
+            {editForm}
+          </Grid>
         </section>
       </main>
 

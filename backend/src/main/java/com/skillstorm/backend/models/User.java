@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.HashSet;
 
 @Document(collection = "users")
-public class User implements UserDetails {
+public class User {
 
     // Mongo will generate _id
     @MongoId
@@ -24,7 +24,7 @@ public class User implements UserDetails {
     private String streetPrimary;
     private String city;
     private String state;
-    private int zipcode;
+    private String zipcode;
     private String role;
 
     public User(String email, String role) {
@@ -33,7 +33,7 @@ public class User implements UserDetails {
     }
 
     public User(String firstName, String lastName, String ssn, String dateOfBirth, String email,
-            String streetPrimary, String city, String state, int zipcode, String role) {
+            String streetPrimary, String city, String state, String zipcode, String role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
@@ -113,11 +113,11 @@ public class User implements UserDetails {
         this.state = state;
     }
 
-    public int getZipcode() {
+    public String getZipcode() {
         return zipcode;
     }
 
-    public void setZipcode(int zipcode) {
+    public void setZipcode(String zipcode) {
         this.zipcode = zipcode;
     }
 
@@ -140,23 +140,7 @@ public class User implements UserDetails {
  
     // User Details methods
 
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((_id == null) ? 0 : _id.hashCode());
-        result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-        result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
-        result = prime * result + ((ssn == null) ? 0 : ssn.hashCode());
-        result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + ((streetPrimary == null) ? 0 : streetPrimary.hashCode());
-        result = prime * result + ((city == null) ? 0 : city.hashCode());
-        result = prime * result + ((state == null) ? 0 : state.hashCode());
-        result = prime * result + zipcode;
-        result = prime * result + ((role == null) ? 0 : role.hashCode());
-        return result;
-    }
+  
 
     @Override
     public boolean equals(Object obj) {
@@ -228,47 +212,4 @@ public class User implements UserDetails {
                 + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", streetPrimary=" + streetPrimary + ", city="
                 + city + ", state=" + state + ", zipcode=" + zipcode + ", role=" + role + "]";
     }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        SimpleGrantedAuthority userRole = new SimpleGrantedAuthority(this.role);
-        authorities.add(userRole);
-
-        return authorities;
-    }
-
-    @Override
-    public String getUsername() {
-        return this.email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-    // included because userdetails requires it
-    @Override
-    public String getPassword() {
-        return "password not needed";
-    }
-
-    
-
 }
