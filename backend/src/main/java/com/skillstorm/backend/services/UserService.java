@@ -63,15 +63,14 @@ public class UserService {
     }
 
     // create a user
-
-  
-
     public User createUser(User user) {
 
         Optional<User> userExists = userRepo.findByEmail(user.getEmail());
         if (userExists.isPresent()) {
-            return null;
+            return userExists.get();
         } else {
+            // encode password
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             // encode ssn
             user.setSsn(passwordEncoder.encode(user.getSsn()));
             // set role to user
@@ -94,13 +93,11 @@ public class UserService {
         }
     }
 
-    /*
-     * INTEND TO DELETE
-     * // delete a user by passing in the user
-     * public void deleteUser(User user) {
-     * userRepo.delete(user);
-     * }
-     */
+    // delete a user by passing in the user
+    public void deleteUser(User user) {
+      userRepo.delete(user);
+    }
+     
 
     // delete a user by passing in their id
     public void deleteUserById(String id) {
@@ -133,15 +130,16 @@ public class UserService {
         createUserByEmail(email);
     }
 
-    // returns the user by the email address
-    public User findUserByEmail(String email) {
-        Optional<User> user = userRepo.findByEmail(email);
+    public boolean checkUser(String username) {
+		return true;
+	}
 
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            return null;
+    public boolean checkLogin(String username, String password) {
+        Optional<User> user = userRepo.findByEmail(username);
+        if(user.isPresent() && passwordEncoder.matches(password, user.get().getPassword())) {
+            return true;
         }
+        return false;
     }
 
 }

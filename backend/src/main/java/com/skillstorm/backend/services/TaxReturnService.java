@@ -133,7 +133,7 @@ public class TaxReturnService {
                     tax = 174238.25 + (number - 578125) * .37;
                 }
                 break;
-            case "married, filing separately":
+            case "married filing separately":
                 if (number <= 11000) {
                     tax = number * .1;
                 } else if (number <= 44725) {
@@ -150,7 +150,7 @@ public class TaxReturnService {
                     tax = 93300.75 + (number - 346875) * .37;
                 }
                 break;
-            case "married, filing jointly":
+            case "married filing jointly":
                 if (number <= 22000) {
                     tax = number * .1;
                 } else if (number <= 89450) {
