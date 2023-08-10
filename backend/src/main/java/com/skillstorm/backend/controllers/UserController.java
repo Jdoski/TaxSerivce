@@ -1,12 +1,18 @@
 package com.skillstorm.backend.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -19,7 +25,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.http.HttpStatus;
 
 
@@ -68,14 +77,13 @@ public class UserController {
         return new ResponseEntity<String>("User deleted successfully", HttpStatus.OK);
     }
 
-    /*  INTEND TO DELETE
     // delete a user by passing in the user
     @DeleteMapping("/user")
     public ResponseEntity<String> deleteUser(@RequestBody User user) {
         userService.deleteUser(user);
 
         return new ResponseEntity<String>("User deleted successfully", HttpStatus.OK);
-    }*/
+    }
 
     // create a user
     @PostMapping("/user")
@@ -136,17 +144,33 @@ public class UserController {
         return "Access Token Not Found";
     }
 
-    @GetMapping("/email")
-    public ResponseEntity<User> getUserByEmail(@AuthenticationPrincipal OAuth2User user) {
-        String email = user.getAttribute("email");
-        User userByEmail = userService.findUserByEmail(email);
-        return new ResponseEntity<User>(userByEmail, HttpStatus.OK);
-    }
-
     @GetMapping("/info")
     public Map<String, Object> userInfo(@AuthenticationPrincipal OAuth2User user){
         return user.getAttributes();
     }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @PostMapping("/check-login")
+    public RedirectView checkLogin(@RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
+        if (userService.checkLogin(username, password)) {
+			if (SecurityContextHolder.getContext().getAuthentication() == null || 
+			    SecurityContextHolder.getContext()
+					.getAuthentication().getClass().equals(AnonymousAuthenticationToken.class)) {
+				UsernamePasswordAuthenticationToken token = 
+					new UsernamePasswordAuthenticationToken(username, password,new ArrayList<>());
+				SecurityContextHolder.getContext().setAuthentication(token);
+			}
+			redirectAttributes.addFlashAttribute("message", "Login Successful");
+			return new RedirectView("hello");
+
+		}
+		redirectAttributes.addFlashAttribute("message", "Invalid Username or Password");
+		return new RedirectView("login");
+	}
 
 }
 

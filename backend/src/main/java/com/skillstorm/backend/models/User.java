@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.util.HashSet;
 
 @Document(collection = "users")
@@ -19,32 +21,47 @@ public class User{
     private String ssn;
     private String dateOfBirth;
     private String email;
+    private String password;
     private String streetPrimary;
     private String city;
     private String state;
     private String zipcode;
     private String role;
+    private String username;
+
+    public User() {
+    }
 
     public User(String email, String role) {
         this.email = email;
         this.role = role;
+        this.username = email;
+
     }
 
-    public User(String firstName, String lastName, String ssn, String dateOfBirth, String email,
-            String streetPrimary, String city, String state, String zipcode, String role) {
+    public User(String _id, String firstName, String lastName, String ssn, String dateOfBirth, String email,
+            String password, String streetPrimary, String city, String state, String zipcode, String role) {
+        this._id = _id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.ssn = ssn;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
+        this.password = password;
         this.streetPrimary = streetPrimary;
         this.city = city;
         this.state = state;
         this.zipcode = zipcode;
         this.role = role;
+        this.username = email;
     }
 
-    public User() {
+    public User(String email, String password, String role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.username = email;
+
     }
 
     public String getFirstName() {
@@ -135,15 +152,13 @@ public class User{
         this.role = role;
     }
 
- 
-    // User Details methods
+    
+    public String getPassword() {
+        return password;
+    }
 
-
-    @Override
-    public String toString() {
-        return "User [_id=" + _id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn
-                + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", streetPrimary=" + streetPrimary + ", city="
-                + city + ", state=" + state + ", zipcode=" + zipcode + ", role=" + role + "]";
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
@@ -156,6 +171,7 @@ public class User{
         result = prime * result + ((ssn == null) ? 0 : ssn.hashCode());
         result = prime * result + ((dateOfBirth == null) ? 0 : dateOfBirth.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((streetPrimary == null) ? 0 : streetPrimary.hashCode());
         result = prime * result + ((city == null) ? 0 : city.hashCode());
         result = prime * result + ((state == null) ? 0 : state.hashCode());
@@ -203,6 +219,11 @@ public class User{
                 return false;
         } else if (!email.equals(other.email))
             return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
+            return false;
         if (streetPrimary == null) {
             if (other.streetPrimary != null)
                 return false;
@@ -229,5 +250,13 @@ public class User{
         } else if (!role.equals(other.role))
             return false;
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User [_id=" + _id + ", firstName=" + firstName + ", lastName=" + lastName + ", ssn=" + ssn
+                + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", password=" + password + ", streetPrimary="
+                + streetPrimary + ", city=" + city + ", state=" + state + ", zipcode=" + zipcode + ", role=" + role
+                + "]";
     }
 }
