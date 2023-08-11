@@ -24,8 +24,6 @@ public class SecurityConfig{
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
-                //.requiresChannel(channel ->
-                //    channel.anyRequest().requiresSecure())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> {
                     auth.anyRequest().permitAll();
@@ -33,7 +31,6 @@ public class SecurityConfig{
                 .csrf((csrf) ->
                     //csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).ignoringAntMatchers("/login"))
                     csrf.disable())
-                //.oauth2Login(withDefaults())
                 //.formLogin(withDefaults())
                 .formLogin(form -> form
                                         .loginPage("/login").defaultSuccessUrl("http://localhost:5173/account").permitAll()
@@ -54,7 +51,7 @@ public class SecurityConfig{
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173/"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173/", "http://s3-cmelendez.s3-website-us-east-1.amazonaws.com"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

@@ -42,15 +42,6 @@ public class TaxReturnController {
         return new ResponseEntity<List<TaxReturn>>(returns, HttpStatus.OK);
     }
 
-    //find a single return by id
-    @GetMapping("/{userid}/{returnId}")
-    public ResponseEntity<TaxReturn> getReturnById(@PathVariable String userid, @PathVariable String returnId) {
-        TaxReturn returnById = taxReturnService.findOneReturn(userid, returnId);
-        
-        return new ResponseEntity<TaxReturn>(returnById, HttpStatus.OK);
-    }
-
-
     @GetMapping("/return/{returnId}")
     public ResponseEntity<TaxReturn> getReturnById(@PathVariable String returnId) {
         Optional<TaxReturn> returnById = taxReturnService.findOneReturnByReturnid(returnId);
@@ -62,7 +53,7 @@ public class TaxReturnController {
     }
 
     //create a return
-    @PostMapping("/{email}/create")
+    @PostMapping("/create/{email}")
     public ResponseEntity<TaxReturn> createReturn(@PathVariable String email, @RequestBody TaxReturn taxReturn) {
         taxReturn.setEmail(email);
         TaxReturn createdReturn = taxReturnService.createReturn(taxReturn);
@@ -78,14 +69,11 @@ public class TaxReturnController {
         return new ResponseEntity<TaxReturn>(createdReturn, HttpStatus.OK);
     }
 
+    //delete a return by passing in the return id
     @DeleteMapping("/delete/{id}")
     public void deleteReturnById(@PathVariable String id) {
         taxReturnService.deleteReturnById(id);
     }
-/*  @PutMapping("/update")
-    public TaxReturn updateReturn(@RequestBody TaxReturn taxReturn) {
-        return taxReturnService.updateReturn(taxReturn);
-    }*/
 
     @PutMapping("/update")
     public ResponseEntity<TaxReturn> updateReturn(@RequestBody TaxReturn taxReturn) {
@@ -93,13 +81,6 @@ public class TaxReturnController {
         
         return new ResponseEntity<TaxReturn>(updatedReturn, HttpStatus.OK);
     }
-/* 
-    @PutMapping("/updateIncome")
-    public ResponseEntity<TaxReturn> updateIncome(@RequestBody TaxReturn taxReturn) {
-        TaxReturn updatedReturn = taxReturnService.updateIncomeSource(taxReturn);
-        
-        return new ResponseEntity<TaxReturn>(updatedReturn, HttpStatus.OK);
-    }*/
 }
 
 

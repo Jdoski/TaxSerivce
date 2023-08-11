@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.http.HttpStatus;
@@ -64,9 +63,11 @@ public class UserController {
 
     // get the login parameters and check if they are valid
     @PostMapping("/check-login")
-    public String checkLogin(@RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
+    public String checkLogin(@RequestBody User user, RedirectAttributes redirectAttributes) {
+        String username = user.getUsername();
+        String password = user.getPassword();
+        
         if (userService.checkLogin(username, password)) {
-            System.out.println("****************************************************************************************");
 			if (SecurityContextHolder.getContext().getAuthentication() == null || 
 			    SecurityContextHolder.getContext()
 					.getAuthentication().getClass().equals(AnonymousAuthenticationToken.class)) {
@@ -74,12 +75,10 @@ public class UserController {
 					new UsernamePasswordAuthenticationToken(username, password,new ArrayList<>());
 				SecurityContextHolder.getContext().setAuthentication(token);
 			}
-            System.out.println("****************************************************************************************");
 			redirectAttributes.addFlashAttribute("message", "Login Successful");
 			return username;
 
 		}
-        System.out.println("---------------------------------------------------------------------------------------------");
 		redirectAttributes.addFlashAttribute("message", "Invalid Username or Password");
 		return null;
 	}
