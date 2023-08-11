@@ -28,21 +28,21 @@ interface TableData extends FormData {
 
 export default function GenerateReport() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-
   const { i18n } = useTranslation();
   const navigate = useNavigate();
   const [tableData, setTableData] = useState<TableData[]>([]);
   const postReportURL = `http://3.228.10.188:8080/users/returns/create`;
 
+  //updating the table of forms and persisting the previous forms added
   const handleFormSubmit = (formData: FormData) => {
     const newEntry: TableData = {
       id: new Date().getTime().toString(),
       ...formData,
     };
-    console.log(formData);
     setTableData((prevData) => [...prevData, newEntry]);
   };
 
+  //helper function to redirect user baded on attribute passed in
   const routeChange = (e: any) => {
     let path = e.currentTarget.getAttribute("data-value");
     navigate(path);
@@ -54,6 +54,15 @@ export default function GenerateReport() {
       setMobileNavOpen(false);
     }
   };
+
+  //adds listener to help fix a bug in the responsive resizing
+  /**
+   * Trussworks mobile button if opened will remained open if user resizing the screen, preventing the user from using the site
+   * until they resize the screen and manually close it.
+   *
+   * This event listener will watch for when the screen grows past that point and force close the mobile nav
+   *
+   * */
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
@@ -67,6 +76,16 @@ export default function GenerateReport() {
     i18n.changeLanguage(lng);
   }, []);
 
+  /**
+   *
+   * Responsible for looping over the many differnt forms supplied to by the user.
+   *
+   * The model of the returns in the backend were very specific, this was needed in order to properly match how the backend accpets data for the posts requests
+   *
+   * Function loops through all the forms and pushes the necessary infomration into the income_sources array. This array is what stores the actualy W2/1099 forms
+   * and is what is used for calculating the deductions.
+   *
+   */
   function loopTableData(newTableData: any) {
     console.log(newTableData);
     const email = newTableData[0].email;
@@ -98,12 +117,9 @@ export default function GenerateReport() {
     console.log("LOOP FUNCTION: " + data);
     return data;
   }
-
+  //sends the formatted data from the loopTableData to the backend through the request body
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log("dataTosend: " + tableData);
-    const dataToSend = loopTableData(tableData);
-    console.log("Data to send: " + dataToSend);
     fetch(postReportURL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -162,6 +178,7 @@ export default function GenerateReport() {
                     </tr>
                   </thead>
                   <tbody>
+                    {/* Mapping all of the different forms to the table to show before submitting */}
                     {tableData.map((data) => (
                       <tr key={data.id}>
                         <td>{data.form}</td>

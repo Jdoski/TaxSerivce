@@ -156,6 +156,9 @@ export default function Account() {
   }, []);
 
   // RIP OAuth2.0 Working project. ETD August 8th 4:45 PM EST 2023
+
+  //Get request that pulls the info from the user baded off of their email.
+  //This is called on component start so the account page will be autoloaded with the users dated when they arrive
   useEffect(() => {
     fetch(emailURL, {
       method: "GET",
@@ -172,6 +175,7 @@ export default function Account() {
       });
   }, []);
 
+  //PUT request to update the account data through to the backend
   const sendData = () => {
     fetch("http://3.228.10.188:8080/users/user", {
       method: "PUT",

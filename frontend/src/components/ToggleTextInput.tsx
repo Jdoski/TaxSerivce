@@ -9,7 +9,7 @@ interface TextInputProps {
   disabled: boolean;
   onChange: any;
 }
-
+//Custome component that adds disabled functionality to a normal Trusswork TextInput
 const ToggleableTextInput: React.FC<TextInputProps> = ({
   label,
   id,

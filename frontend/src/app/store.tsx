@@ -13,6 +13,8 @@ import {
 } from "redux-persist";
 import logger from "redux-logger";
 
+//initial redux store setup for persitant data
+//using redux logger for more helpful redux debugging
 const persistConfig = {
   key: "root",
   storage,
@@ -31,5 +33,6 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+//exoported type to use for typecript to set the state in useSelector
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

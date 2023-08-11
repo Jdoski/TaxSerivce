@@ -28,8 +28,8 @@ export default function Reports() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
+  //initializes the returnData list to be looped through and shown
   const [returnData, setReturnData] = useState<ReportsData[]>([]);
-
   const returnsURL = `http://3.228.10.188:8080/users/returns/${email}`;
 
   const toggleMobileNav = (): void => {
@@ -75,14 +75,15 @@ export default function Reports() {
     })
       .then((data) => data.json())
       .then((data) => {
+        // Due to backend needed exact data, needing to filter the data coming in from the request and only show what we want to show.
         filterData(data);
-        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
   }, []);
 
+  //Filtering out the data we want, and setting adding it to the state of the return data from above
   function filterData(rawData: any) {
     const reports: any[] = [];
     rawData.forEach((element: any) => {
@@ -202,6 +203,7 @@ export default function Reports() {
           </Grid>
           <GridContainer>
             <Grid className="flex-justify-center" row>
+              {/* mapping through all the returns and creating an accordion component for each of them */}
               {returnData.map((data) => (
                 <Accordion
                   year={data.year}

@@ -48,12 +48,14 @@ export default function Form1099({ onSubmit }: ModalProps) {
     year: 0,
   });
 
+  //Used for the filing status radio buttons
   const handleOptionChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setFormData((prevData) => ({ ...prevData, filingStatus: value }));
     setSelectedOption(value);
   };
 
+  //used for the form type radio buttons
   const handleOptionChangeForm = (event: ChangeEvent<HTMLInputElement>) => {
     console.log(event.target);
     const { value } = event.target;
@@ -62,6 +64,7 @@ export default function Form1099({ onSubmit }: ModalProps) {
     setSelectedOptionForm(value);
   };
 
+  // helper to update the formData state with the input fields
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));

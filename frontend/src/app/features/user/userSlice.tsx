@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
+//Initial setup of the userslice that manages the logged in state and email
+//These fields are persisted through the entire application and accessible through useSelector()
 interface UserState {
   isLoggedIn: boolean;
   email: string;
@@ -11,6 +13,7 @@ const initialState: UserState = {
   email: "",
 } as UserState;
 
+//creating the reducers to enable login and set the state for both objects
 export const userSlice = createSlice({
   name: "user",
   initialState,

@@ -2,11 +2,13 @@ import { Grid, GridContainer, Table } from "@trussworks/react-uswds";
 import { useState } from "react";
 
 export default function Accordion(props: any) {
+  //state and helper function for the Accordion component
   const [accordionOpen, setAccordionOpen] = useState(false);
 
   const toggleAccordion = (): void => {
     setAccordionOpen((prevOpen) => !prevOpen);
   };
+  //custom accordion button that takes in props of the parent to populate the table inside of it
   return (
     <>
       <div

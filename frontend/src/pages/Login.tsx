@@ -28,6 +28,7 @@ export default function CreateAccount() {
     password: "",
   });
 
+  // function call to update the state of the userData based on the input fields
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
 
@@ -49,6 +50,8 @@ export default function CreateAccount() {
         break;
     }
   };
+
+  //Post request to backend that creates the initial user with just email and password
   const handleCreateAccount = () => {
     fetch("http://3.228.10.188:8080/users/user", {
       method: "POST",
@@ -56,12 +59,13 @@ export default function CreateAccount() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(userData),
-    })
-      .then((response) => response.json())
-      .then((data) => console.log(data));
-    console.log(JSON.stringify(userData));
+    });
+    //flip to sign in form after account created
     setShowCreateAccount(!showCreateAccount);
   };
+
+  //Function that checks the users credentials and updates the redux-store with the users details
+  //Fetch request returns a true or false that allows us to log the user in and receive user details
   const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(userData);
@@ -75,20 +79,22 @@ export default function CreateAccount() {
       .then((response) => {
         console.log("before response");
         if (response.ok) {
-          console.log(response);
+          //on successfull log in call the redux dispatcher and set the state and email
+          //redirect back to home page afterwords
           dispatch(login(userData.email));
           navigate("../");
         } else {
-          console.log("Response Not Okay");
           throw new Error("Login failed");
         }
       })
       .catch((error) => {
-        console.error(error); // dispatch(logout());
+        console.error(error);
       });
   };
   const [showPassword, setShowPassword] = useState(false);
 
+  //turnary to show the correct form (creat account or sign in)
+  //default trusswork styling using trussworks approved templates
   const selectLogin = showCreateAccount
     ? [
         <Grid
