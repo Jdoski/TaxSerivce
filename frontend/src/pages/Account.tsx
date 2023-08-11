@@ -49,8 +49,6 @@ export default function Account() {
     zipcode: "",
   });
 
-  const email = user;
-  const URL = "http://localhost:8080/users/info";
   const emailURL = `http://localhost:8080/users/email/${user}`;
 
   const toggleMobileNav = (): void => {
@@ -189,8 +187,6 @@ export default function Account() {
       .then((data) => console.log(data));
     console.log(JSON.stringify(userData));
   };
-
-  const lng = navigator.language;
 
   const primaryNavItems = [
     <a

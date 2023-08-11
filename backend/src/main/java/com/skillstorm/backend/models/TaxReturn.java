@@ -19,7 +19,7 @@ public class TaxReturn {
     private double taxable_income;
     private double tax_bill;
     private double tax_due;
-    private ArrayList<IncomeSource> income_sources;
+    private IncomeSource[] income_sources;
 
     public TaxReturn() {
     }
@@ -32,7 +32,7 @@ public class TaxReturn {
 
     public TaxReturn(String id, String userid, String tax_year, String filing_status, double deduction, double income,
             double withheld, double taxable_income, double tax_bill, double tax_due,
-            ArrayList<IncomeSource> income_sources) {
+            IncomeSource[] income_sources) {
         this.id = id;
         this.email = userid;
         this.tax_year = tax_year;
@@ -118,11 +118,11 @@ public class TaxReturn {
         this.tax_due = tax_due;
     }
     
-    public ArrayList<IncomeSource> getIncome_sources() {
+    public IncomeSource[] getIncome_sources() {
         return income_sources;
     }
 
-    public void setIncome_sources(ArrayList<IncomeSource> income_sources) {
+    public void setIncome_sources(IncomeSource[] income_sources) {
         this.income_sources = income_sources;
     }
 
