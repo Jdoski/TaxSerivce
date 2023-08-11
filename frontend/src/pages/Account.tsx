@@ -1,10 +1,7 @@
 import {
   Button,
   ExtendedNav,
-  Footer,
-  FooterNav,
   Grid,
-  GridContainer,
   Header,
   NavMenuButton,
   Title,
@@ -49,7 +46,7 @@ export default function Account() {
     zipcode: "",
   });
 
-  const emailURL = `http://localhost:8080/users/email/${user}`;
+  const emailURL = `http://3.228.10.188:8080/users/email/${user}`;
 
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
@@ -136,6 +133,7 @@ export default function Account() {
   const handleLogout = (e: any) => {
     e.preventDefault();
     dispatch(logout());
+    navigate("../");
   };
 
   // Closes the mobile menu when resizing back over to the default value
@@ -175,7 +173,7 @@ export default function Account() {
   }, []);
 
   const sendData = () => {
-    fetch("http://localhost:8080/users/user", {
+    fetch("http://3.228.10.188:8080/users/user", {
       method: "PUT",
       credentials: "include",
       headers: {
@@ -191,21 +189,21 @@ export default function Account() {
   const primaryNavItems = [
     <a
       key="primaryNav_0"
-      href="http://localhost:5173/"
+      href="http://s3-cmelendez.s3-website-us-east-1.amazonaws.com/"
       className="usa-nav__link"
     >
       <span>{t("nav.home")}</span>
     </a>,
     <a
       key="primaryNav_1"
-      href="http://localhost:5173/account"
+      href="http://s3-cmelendez.s3-website-us-east-1.amazonaws.com/account"
       className="usa-nav__link"
     >
       <span>{t("nav.account")}</span>
     </a>,
     <a
       key="primaryNav_2"
-      href="http://localhost:5173/reports"
+      href="http://s3-cmelendez.s3-website-us-east-1.amazonaws.com/reports"
       className="usa-nav__link"
     >
       <span>{t("nav.reports")}</span>
@@ -232,24 +230,6 @@ export default function Account() {
           </a>
         </Button>,
       ];
-
-  const returnToTop = (
-    <GridContainer className="usa-footer__return-to-top">
-      <a href="#">Return to top</a>
-    </GridContainer>
-  );
-
-  const footerPrimary = (
-    <FooterNav
-      aria-label="Footer navigation"
-      size="medium"
-      links={Array(5).fill(
-        <a href="" className="usa-footer__primary-link">
-          Primary link
-        </a>
-      )}
-    />
-  );
 
   const editForm = isDisabled
     ? [
@@ -396,12 +376,6 @@ export default function Account() {
           </Grid>
         </section>
       </main>
-
-      <Footer
-        returnToTop={returnToTop}
-        primary={footerPrimary}
-        secondary={null}
-      />
     </>
   );
 }

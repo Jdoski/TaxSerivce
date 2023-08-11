@@ -218,7 +218,7 @@ export default function Form1099({ onSubmit }: ModalProps) {
                 Submit
               </Button>
               <ModalToggleButton modalRef={modalRef} closer>
-                Continue without saving
+                Cancel
               </ModalToggleButton>
             </ButtonGroup>
           </ModalFooter>

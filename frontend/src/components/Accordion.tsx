@@ -1,4 +1,4 @@
-import { Button, Grid, GridContainer, Table } from "@trussworks/react-uswds";
+import { Grid, GridContainer, Table } from "@trussworks/react-uswds";
 import { useState } from "react";
 
 export default function Accordion(props: any) {

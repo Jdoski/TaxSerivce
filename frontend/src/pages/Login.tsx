@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { login, logout } from "../app/features/user/userSlice";
+import { login } from "../app/features/user/userSlice";
 import { FormEvent, useState } from "react";
 import {
   Button,
@@ -50,7 +50,7 @@ export default function CreateAccount() {
     }
   };
   const handleCreateAccount = () => {
-    fetch("http://localhost:8080/users/user", {
+    fetch("http://3.228.10.188:8080/users/user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -60,11 +60,12 @@ export default function CreateAccount() {
       .then((response) => response.json())
       .then((data) => console.log(data));
     console.log(JSON.stringify(userData));
+    setShowCreateAccount(!showCreateAccount);
   };
   const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(userData);
-    fetch("http://localhost:8080/users/check-login", {
+    fetch("http://3.228.10.188:8080/users/check-login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -83,10 +84,9 @@ export default function CreateAccount() {
         }
       })
       .catch((error) => {
-        console.error(error), dispatch(logout());
+        console.error(error); // dispatch(logout());
       });
   };
-
   const [showPassword, setShowPassword] = useState(false);
 
   const selectLogin = showCreateAccount
@@ -264,10 +264,6 @@ export default function CreateAccount() {
 
   return (
     <>
-      <a className="usa-skipnav" href="#main-content">
-        Skip to main content
-      </a>
-
       <Header extended>
         <div className="usa-navbar">
           <Title id="extended-logo">

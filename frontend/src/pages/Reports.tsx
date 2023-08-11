@@ -27,12 +27,10 @@ export default function Reports() {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [year, setYear] = useState<ReportsData>();
-  const [taxesDue, setTaxesDue] = useState(0);
-  const [income, setIncome] = useState(0);
+
   const [returnData, setReturnData] = useState<ReportsData[]>([]);
 
-  const returnsURL = `http://localhost:8080/users/returns/${email}`;
+  const returnsURL = `http://3.228.10.188:8080/users/returns/${email}`;
 
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
@@ -86,8 +84,6 @@ export default function Reports() {
   }, []);
 
   function filterData(rawData: any) {
-    const size = rawData.length - 1;
-    const fullData = rawData[size];
     const reports: any[] = [];
     rawData.forEach((element: any) => {
       reports.push({
@@ -106,21 +102,21 @@ export default function Reports() {
   const primaryNavItems = [
     <a
       key="primaryNav_0"
-      href="http://localhost:5173/"
+      href="http://s3-cmelendez.s3-website-us-east-1.amazonaws.com/"
       className="usa-nav__link"
     >
       <span>{t("nav.home")}</span>
     </a>,
     <a
       key="primaryNav_1"
-      href="http://localhost:5173/account"
+      href="http://s3-cmelendez.s3-website-us-east-1.amazonaws.com/account"
       className="usa-nav__link"
     >
       <span>{t("nav.account")}</span>
     </a>,
     <a
       key="primaryNav_2"
-      href="http://localhost:5173/reports"
+      href="http://s3-cmelendez.s3-website-us-east-1.amazonaws.com/reports"
       className="usa-nav__link"
     >
       <span>{t("nav.reports")}</span>

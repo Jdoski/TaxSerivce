@@ -1,8 +1,6 @@
 import {
   Button,
   ExtendedNav,
-  Footer,
-  FooterNav,
   Grid,
   GridContainer,
   Header,
@@ -23,8 +21,6 @@ export default function Home() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
-  const URL = "http://localhost:8080/users/user/64d0247ff92a0477212386d5";
-
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
   };
@@ -37,6 +33,7 @@ export default function Home() {
   const handleLogout = (e: any) => {
     e.preventDefault();
     dispatch(logout());
+    navigate("/login");
   };
 
   // Closes the mobile menu when resizing back over to the default value
@@ -58,45 +55,33 @@ export default function Home() {
     i18n.changeLanguage(lng);
   }, []);
 
-  function getData() {
-    fetch(URL, { credentials: "include", method: "get" })
-      .then((data) => data.json())
-      .then((data) => console.log(data));
-  }
-
   const primaryNavItems = isSignedIn
     ? [
         <a
           key="primaryNav_0"
-          href="http://localhost:5173/"
+          href="http://s3-cmelendez.s3-website-us-east-1.amazonaws.com/"
           className="usa-nav__link"
         >
           <span>{t("nav.home")}</span>
         </a>,
         <a
           key="primaryNav_1"
-          href="http://localhost:5173/account"
+          href="http://s3-cmelendez.s3-website-us-east-1.amazonaws.com/account"
           className="usa-nav__link"
         >
           <span>{t("nav.account")}</span>
         </a>,
         <a
           key="primaryNav_2"
-          href="http://localhost:5173/reports"
+          href="http://s3-cmelendez.s3-website-us-east-1.amazonaws.com/reports"
           className="usa-nav__link"
         >
           <span>{t("nav.reports")}</span>
         </a>,
       ]
     : [
-        <a key="primaryNav_0" className="usa-nav__link">
-          <span>{t("nav.home")}</span>
-        </a>,
-        <a key="primaryNav_1" className="usa-nav__link">
-          <span>{t("nav.about")}</span>
-        </a>,
-        <a key="primaryNav_2" className="usa-nav__link">
-          <span>{t("nav.contact")}</span>
+        <a key="primaryNav_2" href="" className="usa-nav__link">
+          <span>{t("nav.welcome")}</span>
         </a>,
       ];
 
@@ -113,29 +98,11 @@ export default function Home() {
           data-value="login"
           onClick={routeChange}
           type="button"
-          style={{ margin: 10 }}
+          style={{}}
         >
           {t("btn.login")}
         </Button>,
       ];
-
-  const returnToTop = (
-    <GridContainer className="usa-footer__return-to-top">
-      <a href="#">Return to top</a>
-    </GridContainer>
-  );
-
-  const footerPrimary = (
-    <FooterNav
-      aria-label="Footer navigation"
-      size="medium"
-      links={Array(5).fill(
-        <a href="" className="usa-footer__primary-link">
-          Primary link
-        </a>
-      )}
-    />
-  );
 
   return (
     <>
@@ -167,19 +134,12 @@ export default function Home() {
           <Grid row gap>
             <Grid tablet={{ col: 4 }}>
               <h2 className="font-heading-xl margin-top-0 tablet:margin-bottom-0">
-                Quickly generate your federal tax returns
+                {t("home.quickly")}
               </h2>
             </Grid>
             <Grid tablet={{ col: 8 }} className="usa-prose">
-              <p>
-                SpecTaxular is a free to use federal tax calulator. You can
-                calculate how much in federal taxes you will owe based off a
-                number of customisable fields.
-              </p>
-              <p>
-                Each report will be saved to your account, allowing you to
-                compare different reports so you can make decisions accordingly!
-              </p>
+              <p>{t("home.p2")}</p>
+              <p>{t("home.p2b")}</p>
             </Grid>
           </Grid>
         </section>
@@ -188,49 +148,28 @@ export default function Home() {
             <Grid row gap className="usa-graphic-list__row">
               <Grid tablet={{ col: true }} className="usa-media-block">
                 <MediaBlockBody>
-                  <h2 className="usa-graphic-list__heading">
-                    Fast
-                  </h2>
-                  <p>
-                    Just provide the details for your 1099's or W2's
-                    and get an immediate calculation of your taxes.
-                  </p>
+                  <h2 className="usa-graphic-list__heading">{t("home.p3h")}</h2>
+                  <p>{t("home.p3")}</p>
                 </MediaBlockBody>
               </Grid>
               <Grid tablet={{ col: true }} className="usa-media-block">
                 <MediaBlockBody>
-                  <h2 className="usa-graphic-list__heading">
-                    Convenient Reports
-                  </h2>
-                  <p>
-                    Your reports are stored to your account so they
-                    will be conveniently available to you whenever you need.
-                  </p>
+                  <h2 className="usa-graphic-list__heading">{t("home.p4h")}</h2>
+                  <p>{t("home.p4")}</p>
                 </MediaBlockBody>
               </Grid>
             </Grid>
             <Grid row gap className="usa-graphic-list__row">
               <Grid tablet={{ col: true }} className="usa-media-block">
                 <MediaBlockBody>
-                  <h2 className="usa-graphic-list__heading">
-                    Easily Accessible
-                  </h2>
-                  <p>
-                    Our simplified user interface makes it easy to 
-                    create an account, login to an account, and get
-                    started with calculating your taxes.
-                  </p>
+                  <h2 className="usa-graphic-list__heading">{t("home.p5h")}</h2>
+                  <p>{t("home.p5")}</p>
                 </MediaBlockBody>
               </Grid>
               <Grid tablet={{ col: true }} className="usa-media-block">
                 <MediaBlockBody>
-                  <h2 className="usa-graphic-list__heading">
-                    Control Over Your Information
-                  </h2>
-                  <p>
-                    You handle the information on your account and can
-                    edit it at any time.
-                  </p>
+                  <h2 className="usa-graphic-list__heading">{t("home.p6h")}</h2>
+                  <p>{t("home.p6")}</p>
                 </MediaBlockBody>
               </Grid>
             </Grid>
@@ -239,26 +178,11 @@ export default function Home() {
 
         <section id="test-section-id" className="usa-section">
           <GridContainer>
-            <h2 className="font-heading-xl margin-y-0">Section heading</h2>
-            <p className="usa-intro">
-              Everything up to this point should help people understand your
-              agency or project: who you are, your goal or mission, and how you
-              approach it. Use this section to encourage them to act. Describe
-              why they should get in touch here, and use an active verb on the
-              button below. “Get in touch,” “Learn more,” and so on.
-            </p>
-            <Button type="button" onClick={getData}>
-              Get Data
-            </Button>
+            <h2 className="font-heading-xl margin-y-0">{t("home.p7h")}</h2>
+            <p className="usa-intro">{t("home.p7")}</p>
           </GridContainer>
         </section>
       </main>
-
-      <Footer
-        returnToTop={returnToTop}
-        primary={footerPrimary}
-        secondary={null}
-      />
     </>
   );
 }

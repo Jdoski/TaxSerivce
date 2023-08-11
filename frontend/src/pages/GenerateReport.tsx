@@ -32,7 +32,7 @@ export default function GenerateReport() {
   const { i18n } = useTranslation();
   const navigate = useNavigate();
   const [tableData, setTableData] = useState<TableData[]>([]);
-  const postReportURL = `http://localhost:8080/users/returns/create`;
+  const postReportURL = `http://3.228.10.188:8080/users/returns/create`;
 
   const handleFormSubmit = (formData: FormData) => {
     const newEntry: TableData = {
@@ -98,14 +98,9 @@ export default function GenerateReport() {
     console.log("LOOP FUNCTION: " + data);
     return data;
   }
-  // const formatedData = () => {
-  //   console.log("TABLE DATA" + tableData);
-  //   return loopTableData(tableData);
-  // };
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    //POST Request to db in order to send the reports
     console.log("dataTosend: " + tableData);
     const dataToSend = loopTableData(tableData);
     console.log("Data to send: " + dataToSend);
@@ -149,7 +144,7 @@ export default function GenerateReport() {
                 onClick={routeChange}
                 style={{ marginBottom: 20 }}
               >
-                Cancel
+                Back
               </Button>
             </Grid>
             <Grid className="flex-justify-center" style={{ marginLeft: 150 }}>
