@@ -34,12 +34,12 @@ public class TaxReturnService {
 
     // show all returns for a user
     public List<TaxReturn> findAllReturns(String email) {
-        return taxReturnRepo.findByUser_email(email);
+        return taxReturnRepo.findByEmail(email);
     }
     
     // show one return
     public TaxReturn findOneReturn(String email, String returnid) {
-        return taxReturnRepo.findByUser_emailAndId(email, returnid);
+        return taxReturnRepo.findByEmailAndId(email, returnid);
     }
 
     // show one return by returnid
