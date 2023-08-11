@@ -10,7 +10,7 @@ public class TaxReturn {
 
     @MongoId
     private String id;
-    private String userid;
+    private String email;
     private String tax_year;
     private String filing_status;
     private double deduction;
@@ -34,7 +34,7 @@ public class TaxReturn {
             double withheld, double taxable_income, double tax_bill, double tax_due,
             ArrayList<IncomeSource> income_sources) {
         this.id = id;
-        this.userid = userid;
+        this.email = userid;
         this.tax_year = tax_year;
         this.filing_status = filing_status;
         this.deduction = deduction;
@@ -52,14 +52,6 @@ public class TaxReturn {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
     }
 
     public String getTax_year() {
@@ -134,12 +126,20 @@ public class TaxReturn {
         this.income_sources = income_sources;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((userid == null) ? 0 : userid.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result + ((tax_year == null) ? 0 : tax_year.hashCode());
         result = prime * result + ((filing_status == null) ? 0 : filing_status.hashCode());
         long temp;
@@ -173,10 +173,10 @@ public class TaxReturn {
                 return false;
         } else if (!id.equals(other.id))
             return false;
-        if (userid == null) {
-            if (other.userid != null)
+        if (email == null) {
+            if (other.email != null)
                 return false;
-        } else if (!userid.equals(other.userid))
+        } else if (!email.equals(other.email))
             return false;
         if (tax_year == null) {
             if (other.tax_year != null)
@@ -210,10 +210,12 @@ public class TaxReturn {
 
     @Override
     public String toString() {
-        return "TaxReturn [id=" + id + ", userid=" + userid + ", tax_year=" + tax_year + ", filing_status="
+        return "TaxReturn [id=" + id + ", email=" + email + ", tax_year=" + tax_year + ", filing_status="
                 + filing_status + ", deduction=" + deduction + ", income=" + income + ", withheld=" + withheld
                 + ", taxable_income=" + taxable_income + ", tax_bill=" + tax_bill + ", tax_due=" + tax_due
                 + ", income_sources=" + income_sources + "]";
     }
+
+    
     
 }
