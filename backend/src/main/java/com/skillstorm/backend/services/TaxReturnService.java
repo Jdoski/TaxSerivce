@@ -7,11 +7,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import com.skillstorm.backend.models.IncomeSource;
 import com.skillstorm.backend.models.TaxReturn;
 import com.skillstorm.backend.repositories.TaxReturnRepository;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -212,33 +210,4 @@ public class TaxReturnService {
 
         mongoTemplate.updateFirst(query, new Update().pull("income_sources", deleteId), "returns");
     }
-
-    public ArrayList<IncomeSource> removeOneIncomeSource(TaxReturn taxReturn, String deleteId){
-        ArrayList<IncomeSource> source = taxReturn.getIncome_sources();
-        source.remove(deleteId);
-        return source;
-    }
-    /* 
-    public TaxReturn updateIncomeSource(TaxReturn taxReturn){
-        ArrayList<IncomeSource> source = taxReturn.getIncome_sources();
-
-        Query query = new Query();
-        // getting the tax return from the database
-        query.addCriteria(Criteria.where("_id").is(taxReturn.getId()));
-        // finding the income source in the tax return
-        //query.addCriteria(Criteria.where("income_sources").is(incomeSource.getSourceid()));
-
-        Update update = new Update();
-
-        return taxReturn;
-    }*/
-
-    public void updateIncomeSource(TaxReturn taxReturn){
-        //subtract current numbers
-        //incomeSourceService.subtractingIncome(taxReturn);
-        //add new income/withholding
-        incomeSourceService.updateReturn(taxReturn);
-    }
-
-
 }
