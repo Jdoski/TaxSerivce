@@ -15,22 +15,24 @@ import {
   TextInput,
   Title,
 } from "@trussworks/react-uswds";
-import { useEffect, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../app/features/user/userSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import W2Form from "../components/W2Form";
 import Form1099 from "../components/Form1099";
+import { RootState } from "../app/store";
 
 interface FormData {
+  email: string;
+  filingStatus: string;
+  year: number;
   income: number;
   withheld: number;
   employer: string;
   employer_id: number;
   form: string;
-  filingStatus: string;
-  year: number;
 }
 
 interface TableData extends FormData {
@@ -39,30 +41,25 @@ interface TableData extends FormData {
 
 export default function GenerateReport() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const isSignedIn = useSelector((state: any) => state.isLoggedIn);
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const URL = "http://localhost:5173/";
   const [tableData, setTableData] = useState<TableData[]>([]);
+  const email = useSelector((state: RootState) => state.email);
+  const postReportURL = `http://localhost:8080/users/returns/create`;
 
   const handleFormSubmit = (formData: FormData) => {
     const newEntry: TableData = {
       id: new Date().getTime().toString(),
       ...formData,
     };
+    console.log(formData);
     setTableData((prevData) => [...prevData, newEntry]);
   };
 
   const routeChange = (e: any) => {
     let path = e.currentTarget.getAttribute("data-value");
     navigate(path);
-  };
-
-  const handleLogout = (e: any) => {
-    e.preventDefault();
-    dispatch(logout());
   };
 
   // Closes the mobile menu when resizing back over to the default value
@@ -84,8 +81,43 @@ export default function GenerateReport() {
     i18n.changeLanguage(lng);
   }, []);
 
-  function handleSubmit() {
+  const formatedData = () => {
+    const firstItem = tableData[0];
+    const email = firstItem.email;
+    const income = firstItem.income; // Convert to number if needed
+    const withheld = firstItem.withheld; // Convert to number if needed
+    const employer = firstItem.employer;
+    const employer_id = firstItem.employer_id;
+    const form = firstItem.form;
+    const filing_status = firstItem.filingStatus;
+    const tax_year = firstItem.year;
+    const income_sources: any = {
+      type: form,
+      income: income,
+      withheld: withheld,
+      employer: employer,
+      employer_id: employer_id,
+    };
+
+    const data = {
+      email,
+      tax_year,
+      filing_status,
+      income_sources,
+    };
+    return JSON.stringify(data);
+  };
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     //POST Request to db in order to send the reports
+    const dataToSend = formatedData();
+    console.log(dataToSend);
+    fetch(postReportURL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: dataToSend,
+    }).catch((error) => console.error(error));
   }
   const lng = navigator.language;
 
@@ -104,7 +136,7 @@ export default function GenerateReport() {
 
       <main id="main-content">
         <section className="grid-container usa-section">
-          <GridContainer className="flex-justify-center">
+          <GridContainer>
             <Grid
               row
               gap
@@ -116,7 +148,6 @@ export default function GenerateReport() {
             </Grid>
             <Grid className="flex-justify-center" row>
               <Form1099 onSubmit={handleFormSubmit} />
-              <W2Form onSubmit={handleFormSubmit} />
               <Button
                 data-value="../reports"
                 type="button"
@@ -126,12 +157,9 @@ export default function GenerateReport() {
                 Cancel
               </Button>
             </Grid>
-            <Grid className="flex-justify-center">
-              <Form onSubmit={handleSubmit} style={{ margin: "auto" }}>
-                <table
-                  className="usa-table flex-justify-start"
-                  style={{ width: "250%", marginTop: 30 }}
-                >
+            <Grid className="flex-justify-center" style={{ marginLeft: 150 }}>
+              <Form onSubmit={handleSubmit}>
+                <table className="usa-table">
                   <thead>
                     <tr>
                       <th scope="col">Form</th>
@@ -157,7 +185,7 @@ export default function GenerateReport() {
                     ))}
                   </tbody>
                 </table>
-                <Button type="submit" style={{ marginLeft: 75 }}>
+                <Button style={{ margin: "auto" }} type="submit">
                   Submit Report
                 </Button>
               </Form>

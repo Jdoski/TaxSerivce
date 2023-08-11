@@ -213,11 +213,11 @@ public class TaxReturnService {
         mongoTemplate.updateFirst(query, new Update().pull("income_sources", deleteId), "returns");
     }
 
-    public ArrayList<IncomeSource> removeOneIncomeSource(TaxReturn taxReturn, String deleteId){
-        ArrayList<IncomeSource> source = taxReturn.getIncome_sources();
-        source.remove(deleteId);
-        return source;
-    }
+    // public Object[] removeOneIncomeSource(TaxReturn taxReturn, String deleteId){
+    //     Object[] source = taxReturn.getIncome_sources();
+    //     source.remove(deleteId);
+    //     return source;
+    // }
     /* 
     public TaxReturn updateIncomeSource(TaxReturn taxReturn){
         ArrayList<IncomeSource> source = taxReturn.getIncome_sources();

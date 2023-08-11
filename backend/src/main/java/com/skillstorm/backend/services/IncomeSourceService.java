@@ -24,11 +24,11 @@ public class IncomeSourceService {
      */
 
     public void createIncomeSource(TaxReturn taxReturn) {
-        ArrayList<IncomeSource> incomeSourceList = taxReturn.getIncome_sources();
-        for (int i = 0; i < incomeSourceList.size(); i++) {
-            incomeSourceRepo.save(incomeSourceList.get(i));
-            updatingIncome(taxReturn, incomeSourceList.get(i));
-            deleteIncomeSource(incomeSourceList.get(i));
+        IncomeSource[] incomeSourceList = taxReturn.getIncome_sources();
+        for (int i = 0; i < incomeSourceList.length; i++) {
+            incomeSourceRepo.save(incomeSourceList[i]);
+            updatingIncome(taxReturn, incomeSourceList[i]);
+            deleteIncomeSource(incomeSourceList[i]);
         }
     }
 
@@ -40,20 +40,20 @@ public class IncomeSourceService {
     }
 
     public void subtractingIncome(TaxReturn taxReturn) {
-        ArrayList<IncomeSource> incomeSourceList = taxReturn.getIncome_sources();
+        IncomeSource[] incomeSourceList = taxReturn.getIncome_sources();
 
-        for (int i = 0; i < incomeSourceList.size(); i++) {
-            taxReturn.setIncome(taxReturn.getIncome() - incomeSourceList.get(i).getIncome());
-            taxReturn.setWithheld(taxReturn.getWithheld() - incomeSourceList.get(i).getWithheld());
+        for (int i = 0; i < incomeSourceList.length; i++) {
+            taxReturn.setIncome(taxReturn.getIncome() - incomeSourceList[i].getIncome());
+            taxReturn.setWithheld(taxReturn.getWithheld() - incomeSourceList[i].getWithheld());
         }
     }
 
     public void updateReturn(TaxReturn taxReturn) {
         taxReturn.setIncome(0);
         taxReturn.setWithheld(0);
-        ArrayList<IncomeSource> incomeSourceList = taxReturn.getIncome_sources();
-        for (int i = 0; i < incomeSourceList.size(); i++) {
-            updatingIncome(taxReturn, incomeSourceList.get(i));
+        IncomeSource[] incomeSourceList = taxReturn.getIncome_sources();
+        for (int i = 0; i < incomeSourceList.length; i++) {
+            updatingIncome(taxReturn, incomeSourceList[i]);
         }
 
     }
