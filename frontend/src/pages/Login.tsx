@@ -1,7 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { login, logout } from "../app/features/user/userSlice";
-
-import { RootState } from "../app/store";
 import { FormEvent, useState } from "react";
 import {
   Button,
@@ -22,7 +20,6 @@ interface UserData {
 }
 
 export default function CreateAccount() {
-  const isSignedIn = useSelector((state: RootState) => state.isLoggedIn);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showCreateAccount, setShowCreateAccount] = useState(true);

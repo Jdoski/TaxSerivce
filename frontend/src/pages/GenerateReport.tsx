@@ -1,28 +1,15 @@
 import {
   Button,
-  ComboBox,
-  Dropdown,
-  ExtendedNav,
-  Footer,
-  FooterNav,
   Form,
   Grid,
   GridContainer,
   Header,
-  Label,
-  NavMenuButton,
-  Table,
-  TextInput,
   Title,
 } from "@trussworks/react-uswds";
 import { FormEvent, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../app/features/user/userSlice";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import W2Form from "../components/W2Form";
 import Form1099 from "../components/Form1099";
-import { RootState } from "../app/store";
 
 interface FormData {
   email: string;
@@ -41,11 +28,10 @@ interface TableData extends FormData {
 
 export default function GenerateReport() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
-  const dispatch = useDispatch();
-  const { t, i18n } = useTranslation();
+
+  const { i18n } = useTranslation();
   const navigate = useNavigate();
   const [tableData, setTableData] = useState<TableData[]>([]);
-  const email = useSelector((state: RootState) => state.email);
   const postReportURL = `http://localhost:8080/users/returns/create`;
 
   const handleFormSubmit = (formData: FormData) => {
@@ -81,49 +67,54 @@ export default function GenerateReport() {
     i18n.changeLanguage(lng);
   }, []);
 
-  function loopTableData(data: any) {}
-  const formatedData = () => {
-    console.log(tableData.length);
-    const firstItem = tableData[0];
-    const email = firstItem.email;
-    const income = firstItem.income; // Convert to number if needed
-    const withheld = firstItem.withheld; // Convert to number if needed
-    const employer = firstItem.employer;
-    const employer_id = firstItem.employer_id;
-    const form = firstItem.form;
-    const filing_status = firstItem.filingStatus;
-    const tax_year = firstItem.year;
-    const income_sources: any = [
-      {
+  function loopTableData(newTableData: any) {
+    console.log(newTableData);
+    const email = newTableData[0].email;
+    const filing_status = newTableData[0].filingStatus;
+    const tax_year = newTableData[0].year;
+    const income_sources: any[] = [];
+
+    newTableData.forEach((element: any) => {
+      console.log("ELEMENT: " + element);
+      const income = element.income;
+      const withheld = element.withheld;
+      const employer = element.employer;
+      const employer_id = element.employer_id;
+      const form = element.form;
+      income_sources.push({
         type: form,
         income: income,
         withheld: withheld,
         employer: employer,
         employer_id: employer_id,
-      },
-    ];
-
+      });
+    });
     const data = {
       email,
       tax_year,
       filing_status,
       income_sources,
     };
-    return JSON.stringify(data);
-  };
+    console.log("LOOP FUNCTION: " + data);
+    return data;
+  }
+  // const formatedData = () => {
+  //   console.log("TABLE DATA" + tableData);
+  //   return loopTableData(tableData);
+  // };
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     //POST Request to db in order to send the reports
-    const dataToSend = formatedData();
-    console.log(dataToSend);
+    console.log("dataTosend: " + tableData);
+    const dataToSend = loopTableData(tableData);
+    console.log("Data to send: " + dataToSend);
     fetch(postReportURL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: dataToSend,
+      body: JSON.stringify(loopTableData(tableData)),
     }).catch((error) => console.error(error));
   }
-  const lng = navigator.language;
 
   return (
     <>

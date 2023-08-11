@@ -1,8 +1,6 @@
 import {
   Button,
   ExtendedNav,
-  Footer,
-  FooterNav,
   Grid,
   GridContainer,
   Header,
@@ -35,7 +33,7 @@ export default function Reports() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [returnData, setReturnData] = useState<ReportsData>({
-    email: "",
+    email: email,
     tax_year: "",
     filing_status: "",
     type: "",
@@ -81,8 +79,6 @@ export default function Reports() {
     const lng = navigator.language;
     i18n.changeLanguage(lng);
   }, []);
-
-  const lng = navigator.language;
 
   useEffect(() => {
     fetch(returnsURL, {

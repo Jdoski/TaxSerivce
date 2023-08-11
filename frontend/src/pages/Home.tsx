@@ -19,7 +19,6 @@ import { useNavigate } from "react-router-dom";
 export default function Home() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isSignedIn = useSelector((state: any) => state.isLoggedIn);
-  const user = null;
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
@@ -64,7 +63,6 @@ export default function Home() {
       .then((data) => data.json())
       .then((data) => console.log(data));
   }
-  const lng = navigator.language;
 
   const primaryNavItems = isSignedIn
     ? [
