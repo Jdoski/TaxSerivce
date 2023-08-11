@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 public class TaxReturnController {
     @Autowired
     TaxReturnService taxReturnService;
-    
+   
     //return all returns
     @GetMapping
     public ResponseEntity<List<TaxReturn>> getAllReturns() {
@@ -35,9 +35,9 @@ public class TaxReturnController {
     }
 
     //return all returns for a user
-    @GetMapping("/{id}")
-    public ResponseEntity<List<TaxReturn>> getAllReturnsForUser(@PathVariable String id) {
-        List<TaxReturn> returns = taxReturnService.findAllReturns(id);
+    @GetMapping("/{email}")
+    public ResponseEntity<List<TaxReturn>> getAllReturnsForUser(@PathVariable String email) {
+        List<TaxReturn> returns = taxReturnService.findAllReturns(email);
         
         return new ResponseEntity<List<TaxReturn>>(returns, HttpStatus.OK);
     }

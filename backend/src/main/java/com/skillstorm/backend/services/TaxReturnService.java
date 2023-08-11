@@ -33,13 +33,13 @@ public class TaxReturnService {
     }
 
     // show all returns for a user
-    public List<TaxReturn> findAllReturns(String user_id) {
-        return taxReturnRepo.findByUserid(user_id);
+    public List<TaxReturn> findAllReturns(String email) {
+        return taxReturnRepo.findByUser_email(email);
     }
     
     // show one return
-    public TaxReturn findOneReturn(String userid, String returnid) {
-        return taxReturnRepo.findByUseridAndId(userid, returnid);
+    public TaxReturn findOneReturn(String email, String returnid) {
+        return taxReturnRepo.findByUser_emailAndId(email, returnid);
     }
 
     // show one return by returnid
