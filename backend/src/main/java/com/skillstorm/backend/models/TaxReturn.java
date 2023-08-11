@@ -1,7 +1,6 @@
 package com.skillstorm.backend.models;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
