@@ -21,7 +21,7 @@ import org.springframework.http.HttpStatus;
 
 @RestController
 @RequestMapping("/users/returns")
-@CrossOrigin(allowCredentials = "true", originPatterns = "http://localhost:5173")
+@CrossOrigin(allowCredentials = "true", originPatterns = "http://s3-cmelendez.s3-website-us-east-1.amazonaws.com")
 public class TaxReturnController {
     @Autowired
     TaxReturnService taxReturnService;
