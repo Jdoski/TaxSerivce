@@ -124,19 +124,19 @@ export default function Form1099({ onSubmit }: ModalProps) {
                     onChange={handleOptionChange}
                   />
                   <Radio
-                    id="married-filing-jointly"
-                    name="married-filing-jointly"
+                    id="married filing jointly"
+                    name="married filing jointly"
                     label="Married Filing Jointly"
-                    value="married-filing-jointly"
-                    checked={selectedOption === "married-filing-jointly"}
+                    value="married filing jointly"
+                    checked={selectedOption === "married filing jointly"}
                     onChange={handleOptionChange}
                   />
                   <Radio
-                    id="married-filing-seperately"
-                    name="married-filing-seperately"
-                    label="Married Filing Seperately"
-                    value="married-filing-seperately"
-                    checked={selectedOption === "married-filing-seperately"}
+                    id="married filing separately"
+                    name="married filing separately"
+                    label="married filing separately"
+                    value="married filing separately"
+                    checked={selectedOption === "married filing separately"}
                     onChange={handleOptionChange}
                   />
                   <Radio
@@ -148,11 +148,11 @@ export default function Form1099({ onSubmit }: ModalProps) {
                     onChange={handleOptionChange}
                   />
                   <Radio
-                    id="head-of-house"
-                    name="head-of-house"
+                    id="head of house"
+                    name="head of house"
                     label="Head of House"
-                    value="head-of-house"
-                    checked={selectedOption === "head-of-house"}
+                    value="head of house"
+                    checked={selectedOption === "head of house"}
                     onChange={handleOptionChange}
                   />
                 </Fieldset>
