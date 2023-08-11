@@ -56,9 +56,8 @@ public class UserController {
         return new ResponseEntity<List<User>>(users, HttpStatus.OK);
     }
     // Returns user by email address
-    @GetMapping("/email")
-    public ResponseEntity<User> getUserByEmail(@AuthenticationPrincipal OAuth2User user) {
-        String email = user.getAttribute("email");
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
         User userByEmail = userService.findUserByEmail(email);
         return new ResponseEntity<User>(userByEmail, HttpStatus.OK);
     }
@@ -155,8 +154,13 @@ public class UserController {
     }
 
     @PostMapping("/check-login")
-    public RedirectView checkLogin(@RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
+    public String checkLogin(@RequestBody User user, RedirectAttributes redirectAttributes) {
+        System.out.println(user.toString());
+        String username = user.getEmail();
+        String password = user.getPassword();
+        System.out.println("Username: "+ username+ " " +password);
         if (userService.checkLogin(username, password)) {
+            System.out.println("****************************************************************************************");
 			if (SecurityContextHolder.getContext().getAuthentication() == null || 
 			    SecurityContextHolder.getContext()
 					.getAuthentication().getClass().equals(AnonymousAuthenticationToken.class)) {
@@ -164,14 +168,15 @@ public class UserController {
 					new UsernamePasswordAuthenticationToken(username, password,new ArrayList<>());
 				SecurityContextHolder.getContext().setAuthentication(token);
 			}
+            System.out.println("****************************************************************************************");
 			redirectAttributes.addFlashAttribute("message", "Login Successful");
-			return new RedirectView("hello");
+			return username;
 
 		}
+        System.out.println("---------------------------------------------------------------------------------------------");
 		redirectAttributes.addFlashAttribute("message", "Invalid Username or Password");
-		return new RedirectView("login");
+		return null;
 	}
-
 }
 
 

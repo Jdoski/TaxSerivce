@@ -72,7 +72,7 @@ public class UserService {
             // encode password
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             // encode ssn
-            user.setSsn(passwordEncoder.encode(user.getSsn()));
+            //user.setSsn(passwordEncoder.encode(user.getSsn()));
             // set role to user
             user.setRole("ROLE_USER");
             // save to db

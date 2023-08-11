@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { login } from "../app/features/user/userSlice";
+import { login, logout } from "../app/features/user/userSlice";
 
 import { RootState } from "../app/store";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   Button,
   Fieldset,
@@ -16,18 +16,79 @@ import {
 } from "@trussworks/react-uswds";
 import { useNavigate } from "react-router";
 
+interface UserData {
+  email: string;
+  password: string;
+}
+
 export default function CreateAccount() {
   const isSignedIn = useSelector((state: RootState) => state.isLoggedIn);
-  const user = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [showCreateAccount, setShowCreateAccount] = useState(true);
-  const handleLogin = (e: any) => {
-    dispatch(login(user));
-  };
+  const [userData, setUserData] = useState<UserData>({
+    email: "",
+    password: "",
+  });
 
-  const mockSubmit = () => {};
-  const checkboxLabel = () => {};
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+
+    // Update the corresponding state variable based on the input id
+    switch (id) {
+      case "email":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          email: value,
+        }));
+        break;
+      case "password":
+        setUserData((prevUserData) => ({
+          ...prevUserData,
+          password: value,
+        }));
+        break;
+      default:
+        break;
+    }
+  };
+  const handleCreateAccount = () => {
+    fetch("http://localhost:8080/users/user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+    console.log(JSON.stringify(userData));
+  };
+  const handleSignIn = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(userData);
+    fetch("http://localhost:8080/users/check-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => {
+        console.log("before response");
+        if (response.ok) {
+          console.log(response);
+          dispatch(login(userData.email));
+          navigate("../");
+        } else {
+          console.log("Response Not Okay");
+          throw new Error("Login failed");
+        }
+      })
+      .catch((error) => {
+        console.error(error), dispatch(logout());
+      });
+  };
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -42,7 +103,7 @@ export default function CreateAccount() {
         >
           <div className="bg-white padding-y-3 padding-x-5 border border-base-lighter">
             <h1 className="margin-bottom-0">Create account</h1>
-            <Form onSubmit={mockSubmit}>
+            <Form onSubmit={handleCreateAccount}>
               <Fieldset legend="Get started with an account.">
                 <p>
                   <abbr
@@ -55,7 +116,7 @@ export default function CreateAccount() {
                 </p>
 
                 <Label htmlFor="email">
-                  Email address{" "}
+                  Email address
                   <abbr title="required" className="usa-label--required">
                     *
                   </abbr>
@@ -64,6 +125,8 @@ export default function CreateAccount() {
                   id="email"
                   name="email"
                   type="email"
+                  defaultValue={userData.email}
+                  onChange={handleTextChange}
                   autoCapitalize="off"
                   autoCorrect="off"
                   required={true}
@@ -78,6 +141,8 @@ export default function CreateAccount() {
                 <TextInput
                   id="password-create-account"
                   name="password"
+                  defaultValue={userData.password}
+                  onChange={handleTextChange}
                   type={showPassword ? "text" : "password"}
                   autoCapitalize="off"
                   autoCorrect="off"
@@ -104,8 +169,10 @@ export default function CreateAccount() {
                   </abbr>
                 </Label>
                 <TextInput
-                  id="password-create-account-confirm"
-                  name="password-confirm"
+                  id="password-create-account"
+                  name="password"
+                  defaultValue={userData.password}
+                  onChange={handleTextChange}
                   type={showPassword ? "text" : "password"}
                   autoCapitalize="off"
                   autoCorrect="off"
@@ -130,7 +197,7 @@ export default function CreateAccount() {
           <Grid col={12} tablet={{ col: 8 }} desktop={{ col: 6 }}>
             <div className="bg-white padding-y-3 padding-x-5 border border-base-lighter">
               <h1 className="margin-bottom-0">Sign in</h1>
-              <Form onSubmit={mockSubmit}>
+              <Form onSubmit={handleSignIn}>
                 <Fieldset legend="Access your account" legendStyle="large">
                   <Label htmlFor="email">Email address</Label>
 
@@ -138,18 +205,22 @@ export default function CreateAccount() {
                     id="email"
                     name="email"
                     type="email"
-                    autoCorrect="off"
+                    defaultValue={userData.email}
+                    onChange={handleTextChange}
                     autoCapitalize="off"
+                    autoCorrect="off"
                     required={true}
                   />
 
                   <Label htmlFor="email">Password</Label>
                   <TextInput
-                    id="password-sign-in"
+                    id="password"
                     name="password"
+                    defaultValue={userData.password}
+                    onChange={handleTextChange}
                     type={showPassword ? "text" : "password"}
-                    autoCorrect="off"
                     autoCapitalize="off"
+                    autoCorrect="off"
                     required={true}
                   />
                   <p
