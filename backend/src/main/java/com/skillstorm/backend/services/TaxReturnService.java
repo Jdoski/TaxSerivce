@@ -1,10 +1,6 @@
 package com.skillstorm.backend.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.skillstorm.backend.models.TaxReturn;
@@ -23,9 +19,6 @@ public class TaxReturnService {
     @Autowired
     IncomeSourceService incomeSourceService;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
 
     // show all returns in the db
     public List<TaxReturn> findAllReturnsInDb() {
@@ -33,13 +26,13 @@ public class TaxReturnService {
     }
 
     // show all returns for a user
-    public List<TaxReturn> findAllReturns(String user_id) {
-        return taxReturnRepo.findByUserid(user_id);
+    public List<TaxReturn> findAllReturns(String email) {
+        return taxReturnRepo.findByEmail(email);
     }
     
     // show one return
-    public TaxReturn findOneReturn(String userid, String returnid) {
-        return taxReturnRepo.findByUseridAndId(userid, returnid);
+    public TaxReturn findOneReturn(String email, String returnid) {
+        return taxReturnRepo.findByEmailAndId(email, returnid);
     }
 
     // show one return by returnid
@@ -62,6 +55,12 @@ public class TaxReturnService {
     // delete a return by passing in the id
     public void deleteReturnById(String _id) {
         taxReturnRepo.deleteById(_id);
+    }
+
+    // delete a return by passing in the return
+    public void deleteReturn(TaxReturn taxReturn) {
+        TaxReturn returnToDelete = taxReturnRepo.findByEmailAndId(taxReturn.getEmail(), taxReturn.getId());
+        taxReturnRepo.delete(returnToDelete);
     }
 
     // update a return by passing in the return
@@ -202,12 +201,12 @@ public class TaxReturnService {
         }
         return tax;
     }
-
+/* 
     public void removeIncomeSource(TaxReturn taxReturn, String deleteId){
 
         Query query = Query.query(Criteria.where("_id").is(taxReturn.getId()));
         //Update update = Update.update(taxReturn.getIncome_sources(), deleteId);
 
         mongoTemplate.updateFirst(query, new Update().pull("income_sources", deleteId), "returns");
-    }
+    }*/
 }

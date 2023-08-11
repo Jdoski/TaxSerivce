@@ -9,16 +9,13 @@ import java.util.Optional;
 
 public interface TaxReturnRepository extends MongoRepository<TaxReturn, String> {
     
-    // List<TaxReturn> findByUser_id(String user_id);
-    List<TaxReturn> findByUserid(String userid);
-
-
-    // Return one return that matches the userid and returnid
-    TaxReturn findByUseridAndId(String userid, String returnid);
-
     // Return one return that matches the returnid
     Optional<TaxReturn> findById(String returnid);
 
-    // Remove from the income sources array
+    // find all returns that match the email
+    List<TaxReturn> findByEmail(String email);   
     
+    // Return one return that matches the email and returnid
+    TaxReturn findByEmailAndId(String email, String returnid);
+
 }

@@ -25,7 +25,7 @@ import org.springframework.http.HttpStatus;
 public class TaxReturnController {
     @Autowired
     TaxReturnService taxReturnService;
-    
+   
     //return all returns
     @GetMapping
     public ResponseEntity<List<TaxReturn>> getAllReturns() {
@@ -35,21 +35,12 @@ public class TaxReturnController {
     }
 
     //return all returns for a user
-    @GetMapping("/{id}")
-    public ResponseEntity<List<TaxReturn>> getAllReturnsForUser(@PathVariable String id) {
-        List<TaxReturn> returns = taxReturnService.findAllReturns(id);
+    @GetMapping("/{email}")
+    public ResponseEntity<List<TaxReturn>> getAllReturnsForUser(@PathVariable String email) {
+        List<TaxReturn> returns = taxReturnService.findAllReturns(email);
         
         return new ResponseEntity<List<TaxReturn>>(returns, HttpStatus.OK);
     }
-
-    //find a single return by id
-    @GetMapping("/{userid}/{returnId}")
-    public ResponseEntity<TaxReturn> getReturnById(@PathVariable String userid, @PathVariable String returnId) {
-        TaxReturn returnById = taxReturnService.findOneReturn(userid, returnId);
-        
-        return new ResponseEntity<TaxReturn>(returnById, HttpStatus.OK);
-    }
-
 
     @GetMapping("/return/{returnId}")
     public ResponseEntity<TaxReturn> getReturnById(@PathVariable String returnId) {
@@ -62,7 +53,7 @@ public class TaxReturnController {
     }
 
     //create a return
-    @PostMapping("/{email}/create")
+    @PostMapping("/create/{email}")
     public ResponseEntity<TaxReturn> createReturn(@PathVariable String email, @RequestBody TaxReturn taxReturn) {
         taxReturn.setEmail(email);
         TaxReturn createdReturn = taxReturnService.createReturn(taxReturn);
@@ -78,14 +69,11 @@ public class TaxReturnController {
         return new ResponseEntity<TaxReturn>(createdReturn, HttpStatus.OK);
     }
 
+    //delete a return by passing in the return id
     @DeleteMapping("/delete/{id}")
     public void deleteReturnById(@PathVariable String id) {
         taxReturnService.deleteReturnById(id);
     }
-/*  @PutMapping("/update")
-    public TaxReturn updateReturn(@RequestBody TaxReturn taxReturn) {
-        return taxReturnService.updateReturn(taxReturn);
-    }*/
 
     @PutMapping("/update")
     public ResponseEntity<TaxReturn> updateReturn(@RequestBody TaxReturn taxReturn) {
@@ -93,13 +81,6 @@ public class TaxReturnController {
         
         return new ResponseEntity<TaxReturn>(updatedReturn, HttpStatus.OK);
     }
-/* 
-    @PutMapping("/updateIncome")
-    public ResponseEntity<TaxReturn> updateIncome(@RequestBody TaxReturn taxReturn) {
-        TaxReturn updatedReturn = taxReturnService.updateIncomeSource(taxReturn);
-        
-        return new ResponseEntity<TaxReturn>(updatedReturn, HttpStatus.OK);
-    }*/
 }
 
 
