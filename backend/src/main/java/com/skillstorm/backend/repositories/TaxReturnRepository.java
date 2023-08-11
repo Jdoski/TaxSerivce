@@ -13,7 +13,8 @@ public interface TaxReturnRepository extends MongoRepository<TaxReturn, String> 
     Optional<TaxReturn> findById(String returnid);
 
     // find all returns that match the email
-    List<TaxReturn> findByEmail(String email);   
+    List<TaxReturn> findByEmail(String email);
+
     
     // Return one return that matches the email and returnid
     TaxReturn findByEmailAndId(String email, String returnid);

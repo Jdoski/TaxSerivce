@@ -20,27 +20,27 @@ public class TaxReturnService {
     IncomeSourceService incomeSourceService;
 
 
-    // show all returns in the db
+    // Show all returns in the db
     public List<TaxReturn> findAllReturnsInDb() {
         return taxReturnRepo.findAll();
     }
 
-    // show all returns for a user
+    // Show all returns for a user
     public List<TaxReturn> findAllReturns(String email) {
         return taxReturnRepo.findByEmail(email);
     }
     
-    // show one return
+    // Show one return
     public TaxReturn findOneReturn(String email, String returnid) {
         return taxReturnRepo.findByEmailAndId(email, returnid);
     }
 
-    // show one return by returnid
+    // Show one return by returnid
     public Optional<TaxReturn> findOneReturnByReturnid(String returnid) {
         return taxReturnRepo.findById(returnid);
     }
 
-    // create a return
+    // Create a return
     public TaxReturn createReturn(TaxReturn taxReturn) {
         //set the deduction
         taxReturn.setDeduction(deduction(taxReturn.getFiling_status()));
@@ -52,18 +52,18 @@ public class TaxReturnService {
         return taxReturnRepo.save(taxReturn);
     }
     
-    // delete a return by passing in the id
+    // Delete a return by passing in the id
     public void deleteReturnById(String _id) {
         taxReturnRepo.deleteById(_id);
     }
 
-    // delete a return by passing in the return
+    // Delete a return by passing in the return
     public void deleteReturn(TaxReturn taxReturn) {
         TaxReturn returnToDelete = taxReturnRepo.findByEmailAndId(taxReturn.getEmail(), taxReturn.getId());
         taxReturnRepo.delete(returnToDelete);
     }
 
-    // update a return by passing in the return
+    // Update a return by passing in the return
     public TaxReturn updateReturn(TaxReturn taxReturn) {
         // find the return
         Optional<TaxReturn> returnToUpdate = taxReturnRepo.findById(taxReturn.getId());
