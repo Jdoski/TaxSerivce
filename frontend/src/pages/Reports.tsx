@@ -15,14 +15,9 @@ import { useNavigate } from "react-router-dom";
 import Accordion from "../components/Accordion";
 
 interface ReportsData {
-  email: string;
-  tax_year: string;
-  filing_status: string;
-  type: string;
+  year: string;
+  taxes_due: number;
   income: number;
-  withheld: number;
-  employer: string;
-  employer_id: string;
 }
 
 export default function Reports() {
@@ -32,19 +27,12 @@ export default function Reports() {
   const dispatch = useDispatch();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [returnData, setReturnData] = useState<ReportsData>({
-    email: email,
-    tax_year: "",
-    filing_status: "",
-    type: "",
-    income: 0,
-    withheld: 0,
-    employer: "",
-    employer_id: "",
-  });
+  const [year, setYear] = useState<ReportsData>();
+  const [taxesDue, setTaxesDue] = useState(0);
+  const [income, setIncome] = useState(0);
+  const [returnData, setReturnData] = useState<ReportsData[]>([]);
 
-  const returnsURL =
-    "http://localhost:8080/users/returns/64d04b7aca3fa16247b3ff90";
+  const returnsURL = `http://localhost:8080/users/returns/${email}`;
 
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
@@ -89,13 +77,31 @@ export default function Reports() {
     })
       .then((data) => data.json())
       .then((data) => {
-        setReturnData(data);
+        filterData(data);
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
-    console.log(returnData);
   }, []);
+
+  function filterData(rawData: any) {
+    const size = rawData.length - 1;
+    const fullData = rawData[size];
+    const reports: any[] = [];
+    rawData.forEach((element: any) => {
+      reports.push({
+        year: element["tax_year"],
+        income: element["income"],
+        taxes_due: element["tax_due"],
+      });
+      setReturnData(reports);
+    });
+    const newReport = {
+      reports,
+    };
+    return newReport;
+  }
 
   const primaryNavItems = [
     <a
@@ -200,8 +206,13 @@ export default function Reports() {
           </Grid>
           <GridContainer>
             <Grid className="flex-justify-center" row>
-              <Accordion year={2003} />
-              <Accordion year={2004} />
+              {returnData.map((data) => (
+                <Accordion
+                  year={data.year}
+                  taxesDue={data.taxes_due}
+                  income={data.income}
+                />
+              ))}
             </Grid>
           </GridContainer>
         </section>

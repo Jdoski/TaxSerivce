@@ -34,34 +34,19 @@ export default function Accordion(props: any) {
               <Table bordered className="usa-table">
                 <thead>
                   <tr>
-                    <th scope="col">Form</th>
+                    <th scope="col">Year</th>
                     <th scope="col">Income</th>
-                    <th scope="col">Taxs Due</th>
+                    <th scope="col">Taxes Due</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>1099</td>
-                    <td>$45,000</td>
-                    <td>$4,302</td>
+                    <td>{props.year}</td>
+                    <td>${props.income}</td>
+                    <td>${props.taxesDue}</td>
                   </tr>
                 </tbody>
               </Table>
-
-              <Button
-                className="usa-button usa-button--accent-warm"
-                style={{ maxHeight: 45, marginLeft: 10, marginTop: 40 }}
-                type="button"
-              >
-                Edit
-              </Button>
-              <Button
-                className="usa-button usa-button--secondary"
-                style={{ maxHeight: 45, marginLeft: 10, marginTop: 40 }}
-                type="button"
-              >
-                Delete
-              </Button>
             </Grid>
           </GridContainer>
         </div>
