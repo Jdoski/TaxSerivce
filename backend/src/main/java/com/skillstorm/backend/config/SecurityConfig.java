@@ -34,6 +34,7 @@ public class SecurityConfig{
                     //csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).ignoringAntMatchers("/login"))
                     csrf.disable())
                 //.oauth2Login(withDefaults())
+                //.formLogin(withDefaults())
                 .formLogin(form -> form
                                         .loginPage("/login").defaultSuccessUrl("http://localhost:5173/account").permitAll()
                                         )

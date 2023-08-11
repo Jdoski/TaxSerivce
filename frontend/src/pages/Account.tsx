@@ -32,8 +32,8 @@ interface UserData {
 export default function Account() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isSignedIn = useSelector((state: RootState) => state.isLoggedIn);
+  const user = useSelector((state: RootState) => state.email);
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const [isDisabled, setDisabled] = useState(true);
@@ -49,8 +49,9 @@ export default function Account() {
     zipcode: "",
   });
 
+  const email = user;
   const URL = "http://localhost:8080/users/info";
-  const emailURL = "http://localhost:8080/users/email";
+  const emailURL = `http://localhost:8080/users/email/${user}`;
 
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
@@ -158,8 +159,14 @@ export default function Account() {
     i18n.changeLanguage(lng);
   }, []);
 
+  // RIP OAuth2.0 Working project. ETD August 8th 4:45 PM EST 2023
   useEffect(() => {
-    fetch(emailURL, { credentials: "include", method: "get" })
+    fetch(emailURL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((data) => data.json())
       .then((data) => {
         setUserData(data);
@@ -219,7 +226,7 @@ export default function Account() {
       ]
     : [
         <Button
-          data-value="login"
+          data-value="../login"
           onClick={routeChange}
           type="button"
           style={{ margin: 10 }}

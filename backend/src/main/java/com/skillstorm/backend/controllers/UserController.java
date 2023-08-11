@@ -63,11 +63,9 @@ public class UserController {
 
     // get the login parameters and check if they are valid
     @PostMapping("/check-login")
-    public String checkLogin(@RequestBody User user, RedirectAttributes redirectAttributes) {
-        String username = user.getEmail();
-        String password = user.getPassword();
-        System.out.println("username: " + username + " password: " + password + " checkLogin");
+    public RedirectView checkLogin(@RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
         if (userService.checkLogin(username, password)) {
+            System.out.println("****************************************************************************************");
 			if (SecurityContextHolder.getContext().getAuthentication() == null || 
 			    SecurityContextHolder.getContext()
 					.getAuthentication().getClass().equals(AnonymousAuthenticationToken.class)) {
@@ -75,18 +73,15 @@ public class UserController {
 					new UsernamePasswordAuthenticationToken(username, password,new ArrayList<>());
 				SecurityContextHolder.getContext().setAuthentication(token);
 			}
+            System.out.println("****************************************************************************************");
 			redirectAttributes.addFlashAttribute("message", "Login Successful");
 			return username;
 
 		}
+        System.out.println("---------------------------------------------------------------------------------------------");
 		redirectAttributes.addFlashAttribute("message", "Invalid Username or Password");
-		return username;
+		return new RedirectView("login");
 	}
-
-    @GetMapping(value="/hello")
-    public String helloWorld() {
-        return "Hello World";
-    }
 
 }
 
