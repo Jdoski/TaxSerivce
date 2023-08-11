@@ -2,6 +2,8 @@ package com.skillstorm.backend.controllers;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -63,7 +65,7 @@ public class UserController {
 
     // get the login parameters and check if they are valid
     @PostMapping("/check-login")
-    public String checkLogin(@RequestBody User user, RedirectAttributes redirectAttributes) {
+    public String checkLogin(HttpServletRequest request, @RequestBody User user, RedirectAttributes redirectAttributes) {
         String username = user.getUsername();
         String password = user.getPassword();
         

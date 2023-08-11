@@ -8,6 +8,7 @@ import com.skillstorm.backend.models.User;
 
 public interface UserRepository extends MongoRepository<User, String> {
 
+
     // required for spring security, returns the email
     User findByUsername(String username);
 
