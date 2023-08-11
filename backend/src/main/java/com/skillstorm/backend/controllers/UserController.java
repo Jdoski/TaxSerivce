@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.http.HttpStatus;
@@ -63,7 +64,7 @@ public class UserController {
 
     // get the login parameters and check if they are valid
     @PostMapping("/check-login")
-    public RedirectView checkLogin(@RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
+    public String checkLogin(@RequestParam("username") String username, @RequestParam("password") String password, RedirectAttributes redirectAttributes) {
         if (userService.checkLogin(username, password)) {
             System.out.println("****************************************************************************************");
 			if (SecurityContextHolder.getContext().getAuthentication() == null || 
@@ -80,7 +81,7 @@ public class UserController {
 		}
         System.out.println("---------------------------------------------------------------------------------------------");
 		redirectAttributes.addFlashAttribute("message", "Invalid Username or Password");
-		return new RedirectView("login");
+		return null;
 	}
 
 }
