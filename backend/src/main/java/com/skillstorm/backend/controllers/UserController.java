@@ -26,7 +26,7 @@ import com.skillstorm.backend.services.UserService;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin("*")
+@CrossOrigin(allowCredentials = "true", originPatterns = "http://s3-cmelendez.s3-website-us-east-1.amazonaws.com")
 public class UserController {
     
     @Autowired

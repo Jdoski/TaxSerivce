@@ -7,8 +7,6 @@ import com.skillstorm.backend.models.IncomeSource;
 import com.skillstorm.backend.models.TaxReturn;
 import com.skillstorm.backend.repositories.IncomeSourceRepository;
 
-import java.util.ArrayList;
-
 @Service
 public class IncomeSourceService {
 

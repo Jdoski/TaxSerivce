@@ -27,13 +27,6 @@ public class User{
     public User() {
     }
 
-    public User(String email, String role) {
-        this.email = email;
-        this.role = role;
-        this.username = email;
-
-    }
-
     public User(String _id, String firstName, String lastName, String ssn, String dateOfBirth, String email,
             String password, String streetPrimary, String city, String state, String zipcode, String role) {
         this._id = _id;
@@ -56,7 +49,12 @@ public class User{
         this.password = password;
         this.role = role;
         this.username = email;
+    }
 
+    public User(String email, String password){
+        this.email = email;
+        this.password = password;
+        this.username = email;
     }
 
     public String getFirstName() {
