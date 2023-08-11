@@ -14,8 +14,11 @@ import {
   TextInput,
 } from "@trussworks/react-uswds";
 import { ChangeEvent, useRef, useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store";
 
 interface FormData {
+  email: string;
   income: number;
   withheld: number;
   employer: string;
@@ -31,13 +34,16 @@ interface ModalProps {
 
 export default function Form1099({ onSubmit }: ModalProps) {
   const modalRef = useRef<ModalRef>(null);
+  const email = useSelector((state: RootState) => state.email);
   const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOptionForm, setSelectedOptionForm] = useState("");
   const [formData, setFormData] = useState<FormData>({
+    email: email,
     income: 0,
     withheld: 0,
     employer: "",
     employer_id: 0,
-    form: "1099",
+    form: "",
     filingStatus: "",
     year: 0,
   });
@@ -46,6 +52,14 @@ export default function Form1099({ onSubmit }: ModalProps) {
     const { value } = event.target;
     setFormData((prevData) => ({ ...prevData, filingStatus: value }));
     setSelectedOption(value);
+  };
+
+  const handleOptionChangeForm = (event: ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target);
+    const { value } = event.target;
+    setFormData((prevData) => ({ ...prevData, form: value }));
+    console.log(value);
+    setSelectedOptionForm(value);
   };
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -61,7 +75,7 @@ export default function Form1099({ onSubmit }: ModalProps) {
     <div>
       <div>
         <ModalToggleButton modalRef={modalRef} opener>
-          Add 1099 Form
+          Add A New Form
         </ModalToggleButton>
         <Modal
           ref={modalRef}
@@ -75,18 +89,29 @@ export default function Form1099({ onSubmit }: ModalProps) {
           <div className="usa-prose">
             <GridContainer>
               <Grid>
-                <h2>1099 Data</h2>
-                <Label htmlFor={"year"}>
-                  <h3>Year</h3>
+                <h2>Tax Return Questions</h2>
+                <Label htmlFor={"form"}>
+                  <h3>Select Form Type:</h3>
                 </Label>
-                <TextInput
-                  id="year"
-                  name="year"
-                  type="number"
-                  value={formData.year}
-                  onChange={handleInputChange}
-                />
-                <Label htmlFor={"year"}>
+                <Fieldset legend="Form" legendStyle="srOnly">
+                  <Radio
+                    id="W2"
+                    name="W2"
+                    label="W2"
+                    value="W2"
+                    checked={selectedOptionForm === "W2"}
+                    onChange={handleOptionChangeForm}
+                  />
+                  <Radio
+                    id="1099"
+                    name="1099"
+                    label="1099"
+                    value="1099"
+                    checked={selectedOptionForm === "1099"}
+                    onChange={handleOptionChangeForm}
+                  />
+                </Fieldset>
+                <Label htmlFor={"status"}>
                   <h3>Select Filing Status:</h3>
                 </Label>
                 <Fieldset legend="FilingStatus" legendStyle="srOnly">
@@ -99,19 +124,19 @@ export default function Form1099({ onSubmit }: ModalProps) {
                     onChange={handleOptionChange}
                   />
                   <Radio
-                    id="married-filing-jointly"
-                    name="married-filing-jointly"
+                    id="married filing jointly"
+                    name="married filing jointly"
                     label="Married Filing Jointly"
-                    value="married-filing-jointly"
-                    checked={selectedOption === "married-filing-jointly"}
+                    value="married filing jointly"
+                    checked={selectedOption === "married filing jointly"}
                     onChange={handleOptionChange}
                   />
                   <Radio
-                    id="married-filing-seperately"
-                    name="married-filing-seperately"
-                    label="Married Filing Seperately"
-                    value="married-filing-seperately"
-                    checked={selectedOption === "married-filing-seperately"}
+                    id="married filing separately"
+                    name="married filing separately"
+                    label="married filing separately"
+                    value="married filing separately"
+                    checked={selectedOption === "married filing separately"}
                     onChange={handleOptionChange}
                   />
                   <Radio
@@ -123,14 +148,24 @@ export default function Form1099({ onSubmit }: ModalProps) {
                     onChange={handleOptionChange}
                   />
                   <Radio
-                    id="head-of-house"
-                    name="head-of-house"
+                    id="head of house"
+                    name="head of house"
                     label="Head of House"
-                    value="head-of-house"
-                    checked={selectedOption === "head-of-house"}
+                    value="head of house"
+                    checked={selectedOption === "head of house"}
                     onChange={handleOptionChange}
                   />
                 </Fieldset>
+                <Label htmlFor={"year"}>
+                  <h3>Year</h3>
+                </Label>
+                <TextInput
+                  id="year"
+                  name="year"
+                  type="number"
+                  value={formData.year}
+                  onChange={handleInputChange}
+                />
                 <Label htmlFor="income">
                   <h3>Income</h3>
                 </Label>

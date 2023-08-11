@@ -1,8 +1,6 @@
 import {
   Button,
   ExtendedNav,
-  Footer,
-  FooterNav,
   Grid,
   GridContainer,
   Header,
@@ -16,15 +14,37 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Accordion from "../components/Accordion";
 
+interface ReportsData {
+  email: string;
+  tax_year: string;
+  filing_status: string;
+  type: string;
+  income: number;
+  withheld: number;
+  employer: string;
+  employer_id: string;
+}
+
 export default function Reports() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isSignedIn = useSelector((state: any) => state.isLoggedIn);
+  const email = useSelector((state: any) => state.email);
   const dispatch = useDispatch();
-  const user = useSelector((state: any) => state.user);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  const [returnData, setReturnData] = useState<ReportsData>({
+    email: email,
+    tax_year: "",
+    filing_status: "",
+    type: "",
+    income: 0,
+    withheld: 0,
+    employer: "",
+    employer_id: "",
+  });
 
-  const URL = "http://localhost:5173/";
+  const returnsURL =
+    "http://localhost:8080/users/returns/64d04b7aca3fa16247b3ff90";
 
   const toggleMobileNav = (): void => {
     setMobileNavOpen((prevOpen) => !prevOpen);
@@ -38,6 +58,7 @@ export default function Reports() {
   const handleLogout = (e: any) => {
     e.preventDefault();
     dispatch(logout());
+    navigate("/login");
   };
 
   // Closes the mobile menu when resizing back over to the default value
@@ -59,7 +80,22 @@ export default function Reports() {
     i18n.changeLanguage(lng);
   }, []);
 
-  const lng = navigator.language;
+  useEffect(() => {
+    fetch(returnsURL, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        setReturnData(data);
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+    console.log(returnData);
+  }, []);
 
   const primaryNavItems = [
     <a

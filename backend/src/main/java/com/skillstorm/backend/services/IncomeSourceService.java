@@ -17,11 +17,11 @@ public class IncomeSourceService {
 
     // create a new income source and update the return's income
     public void createIncomeSource(TaxReturn taxReturn) {
-        ArrayList<IncomeSource> incomeSourceList = taxReturn.getIncome_sources();
-        for (int i = 0; i < incomeSourceList.size(); i++) {
-            incomeSourceRepo.save(incomeSourceList.get(i));
-            updatingIncome(taxReturn, incomeSourceList.get(i));
-            deleteIncomeSource(incomeSourceList.get(i));
+        IncomeSource[] incomeSourceList = taxReturn.getIncome_sources();
+        for (int i = 0; i < incomeSourceList.length; i++) {
+            incomeSourceRepo.save(incomeSourceList[i]);
+            updatingIncome(taxReturn, incomeSourceList[i]);
+            deleteIncomeSource(incomeSourceList[i]);
         }
     }
 
@@ -37,9 +37,9 @@ public class IncomeSourceService {
     public void updateReturn(TaxReturn taxReturn) {
         taxReturn.setIncome(0);
         taxReturn.setWithheld(0);
-        ArrayList<IncomeSource> incomeSourceList = taxReturn.getIncome_sources();
-        for (int i = 0; i < incomeSourceList.size(); i++) {
-            updatingIncome(taxReturn, incomeSourceList.get(i));
+        IncomeSource[] incomeSourceList = taxReturn.getIncome_sources();
+        for (int i = 0; i < incomeSourceList.length; i++) {
+            updatingIncome(taxReturn, incomeSourceList[i]);
         }
     }
 
