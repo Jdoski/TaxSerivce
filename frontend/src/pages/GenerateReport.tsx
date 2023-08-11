@@ -81,7 +81,9 @@ export default function GenerateReport() {
     i18n.changeLanguage(lng);
   }, []);
 
+  function loopTableData(data: any) {}
   const formatedData = () => {
+    console.log(tableData.length);
     const firstItem = tableData[0];
     const email = firstItem.email;
     const income = firstItem.income; // Convert to number if needed
@@ -91,13 +93,15 @@ export default function GenerateReport() {
     const form = firstItem.form;
     const filing_status = firstItem.filingStatus;
     const tax_year = firstItem.year;
-    const income_sources: any = {
-      type: form,
-      income: income,
-      withheld: withheld,
-      employer: employer,
-      employer_id: employer_id,
-    };
+    const income_sources: any = [
+      {
+        type: form,
+        income: income,
+        withheld: withheld,
+        employer: employer,
+        employer_id: employer_id,
+      },
+    ];
 
     const data = {
       email,
