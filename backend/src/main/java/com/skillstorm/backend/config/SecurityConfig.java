@@ -50,7 +50,7 @@ public class SecurityConfig{
                     //csrf.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).ignoringAntMatchers("/signin"))
                     csrf.disable())
                 //.oauth2Login(withDefaults())
-                .formLogin(withDefaults())
+                //.formLogin(withDefaults())
                 .formLogin(form -> form
                                         .loginPage("/login").permitAll()
                                         )
