@@ -1,13 +1,8 @@
 package com.skillstorm.backend.models;
 
-import java.util.Collection;
-import java.util.Set;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.HashSet;
 
 @Document(collection = "users")
 public class User{
@@ -159,6 +154,14 @@ public class User{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

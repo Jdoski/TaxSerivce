@@ -62,9 +62,9 @@ public class TaxReturnController {
     }
 
     //create a return
-    @PostMapping("/{userid}/create")
-    public ResponseEntity<TaxReturn> createReturn(@PathVariable String userid, @RequestBody TaxReturn taxReturn) {
-        taxReturn.setUserid(userid);
+    @PostMapping("/{email}/create")
+    public ResponseEntity<TaxReturn> createReturn(@PathVariable String email, @RequestBody TaxReturn taxReturn) {
+        taxReturn.setEmail(email);
         TaxReturn createdReturn = taxReturnService.createReturn(taxReturn);
         
         return new ResponseEntity<TaxReturn>(createdReturn, HttpStatus.OK);
