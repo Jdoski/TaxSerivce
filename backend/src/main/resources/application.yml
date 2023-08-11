@@ -1,43 +1,42 @@
 spring:
-    config:
-        import: 
-             env.yml
-             
-    data:
-        mongodb:
-                #uri: ${MONGO_CONNECT}
-                uri: ${AWS_CONNECT}
-                #database: ${MONGO_DB}
-                database: ${AWS_DB}
-                
-    output:
-        ansi:
-            enabled: ALWAYS            
+  config:
+    import: env.yml
 
-    security:
-        oauth2:
-            client:
-                registration:
-                    google:
-                        clientId: ${OATH2_CLIENT}
-                        clientSecret: ${OATH2_SECRET}
-                        
+  data:
+    mongodb:
+      uri: ${MONGO_CONNECT}
+      #uri: ${AWS_CONNECT}
+      database: ${MONGO_DB}
+      #database: ${AWS_DB}
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ${OATH2_CLIENT}
+            clientSecret: ${OATH2_SECRET}
+
 javax:
-    net:
-        ssl:
-            trustStore: ${TRUST_STORE}
-            trustStorePassword: ${TRUST_STORE_PS}
-                                                                         
+  net:
+    ssl:
+      trustStore: ${TRUST_STORE}
+      trustStorePassword: ${TRUST_STORE_PS}
+
 # setting the logging level
 logging:
-    level:
-        com:
-            skillstorm: debug               # sets the logging level for the entire package
+  level:
+    com:
+      skillstorm: debug # sets the logging level for the entire package
 
 #server:
- #   ssl:
-  #      key-store: KS
-   #     key-store-password: KSP
-    #    key-store-type: KST
-     #   key-alias: KA
-      #  key-password: KP
+#   ssl:
+#      key-store: KS
+#     key-store-password: KSP
+#    key-store-type: KST
+#   key-alias: KA
+#  key-password: KP
